@@ -1,10 +1,12 @@
-# Render Blueprint: one always-on web service serving the API and the React app.
+# Render Blueprint: one web service serving the API and the React app.
 # Values marked `sync: false` are asked for when you create the Blueprint.
 services:
   - type: web
     name: codelings
     runtime: node
-    plan: starter # always on, so the 7pm reminder emails go out
+    plan: free
+    # Free plan sleeps when idle: set up cron-job.org to call /api/cron/run every 10 minutes
+    # (see README). Switch to `starter` to stay awake without it.
     buildCommand: npm run build
     startCommand: npm start
     healthCheckPath: /api/health
@@ -14,6 +16,8 @@ services:
       - key: NODE_VERSION
         value: "22"
       - key: JWT_SECRET
+        generateValue: true
+      - key: CRON_SECRET
         generateValue: true
       - key: MONGO_URI
         sync: false

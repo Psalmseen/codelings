@@ -51,13 +51,16 @@ In production one Node service serves both the API and the built React app (`npm
    - `CLIENT_URL`: the app's public address, e.g. `https://codelings.onrender.com` (you can fill it in after the first deploy shows the URL, then redeploy)
    - `ADMIN_NAME`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`: your admin login (created on first start only)
    - `SMTP_USER`, `SMTP_PASS`, `MAIL_FROM`: your Gmail address, its App Password, and e.g. `Codelings <you@gmail.com>`
-4. Open the app, sign in as admin, and use **Send me a test** on the dashboard to check email works.
+4. **Keep it awake (free plan):** Render's free plan sleeps after ~15 idle minutes. On [cron-job.org](https://cron-job.org) (free), create a job that calls
+   `https://YOUR-APP.onrender.com/api/cron/run?key=YOUR_CRON_SECRET` **every 10 minutes**. Copy `CRON_SECRET` from Render → your service → Environment. Each call keeps the app awake and sends any due 7pm reminders.
+   On the paid Starter plan this step is optional.
+5. Open the app, sign in as admin, and use **Send me a test** on the dashboard to check email works.
 
 Students can install the app from their phone browser ("Add to Home screen").
 
 ## Background jobs
 
-The API runs two hourly jobs (node-cron): closing finished league weeks, and sending streak reminders at 7pm in each student's timezone. **The server must stay awake for reminders to go out on time.** Free hosts that sleep when idle (e.g. Render's free tier) will skip them, so use an always-on plan for the API. League weeks also close on startup and whenever someone opens the league page, so they catch up regardless.
+Two jobs run hourly inside the server (node-cron): closing finished league weeks, and sending streak reminders at 7pm in each student's timezone. They also run whenever `/api/cron/run?key=CRON_SECRET` is called, which is how a free host that sleeps gets woken up (see step 4 above). Runs never overlap, and each student gets at most one reminder a day. League weeks also close when someone opens the league page.
 
 ## Build phases
 

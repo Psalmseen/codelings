@@ -9,6 +9,7 @@ import { env } from './config/env.js';
 import { errorHandler, notFound } from './middleware/error.js';
 import adminRoutes from './routes/admin/index.js';
 import authRoutes from './routes/auth.js';
+import cronRoutes from './routes/cron.js';
 import inviteRoutes from './routes/invites.js';
 import learnRoutes from './routes/learn.js';
 
@@ -39,6 +40,7 @@ export function createApp() {
   app.use('/api/invites', inviteRoutes);
   app.use('/api/learn', learnRoutes);
   app.use('/api/admin', adminRoutes);
+  app.use('/api/cron', cronRoutes);
 
   if (fs.existsSync(clientDist)) {
     // Hashed build assets never change, so they can be cached for a long time

@@ -26,6 +26,7 @@ export const env = {
   SMTP_PASS: process.env.SMTP_PASS,
   MAIL_FROM: process.env.MAIL_FROM ?? 'Codelings <hello@codelings.local>',
   LEAGUE_TIMEZONE: process.env.LEAGUE_TIMEZONE ?? 'Africa/Lagos',
+  CRON_SECRET: process.env.CRON_SECRET,
   ADMIN_NAME: process.env.ADMIN_NAME ?? 'Admin',
   ADMIN_EMAIL: process.env.ADMIN_EMAIL,
   ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
