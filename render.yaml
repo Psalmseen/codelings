@@ -1,0 +1,39 @@
+# Render Blueprint: one always-on web service serving the API and the React app.
+# Values marked `sync: false` are asked for when you create the Blueprint.
+services:
+  - type: web
+    name: codelings
+    runtime: node
+    plan: starter # always on, so the 7pm reminder emails go out
+    buildCommand: npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: "22"
+      - key: JWT_SECRET
+        generateValue: true
+      - key: MONGO_URI
+        sync: false
+      - key: CLIENT_URL
+        sync: false
+      - key: LEAGUE_TIMEZONE
+        value: Africa/Lagos
+      - key: ADMIN_NAME
+        sync: false
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: SMTP_HOST
+        value: smtp.gmail.com
+      - key: SMTP_PORT
+        value: "465"
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false
+      - key: MAIL_FROM
+        sync: false

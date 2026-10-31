@@ -1,0 +1,98 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Nunito", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --color-grape-50: #f6f4ff;
+  --color-grape-100: #ece8ff;
+  --color-grape-200: #d8cfff;
+  --color-grape-400: #8f75ff;
+  --color-grape-500: #6d4aff;
+  --color-grape-600: #5a37f0;
+  --color-grape-700: #4626d6;
+  --color-grape-900: #1e1b4b;
+  --color-flame-400: #ffb84d;
+  --color-flame-500: #ff9f1c;
+  --color-heart-500: #ff4d6d;
+
+  --animate-float: float 1.6s ease-in-out infinite;
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+}
+
+@layer base {
+  body {
+    @apply bg-slate-50 text-grape-900 antialiased;
+  }
+}
+
+/* Shared component classes (as utilities so they can be combined with @apply and variants) */
+@utility btn {
+  @apply focus-visible:ring-grape-200 inline-flex cursor-pointer outline-none focus-visible:ring-4 items-center justify-center gap-2 rounded-2xl px-5 py-3 text-sm font-extrabold tracking-wide uppercase transition select-none active:translate-y-[3px] disabled:pointer-events-none disabled:opacity-50;
+}
+
+@utility btn-sm {
+  @apply px-3 py-2 text-xs;
+}
+
+@utility btn-primary {
+  @apply bg-grape-500 text-white shadow-[0_4px_0_var(--color-grape-700)] hover:bg-grape-600 active:shadow-none;
+}
+
+@utility btn-secondary {
+  @apply border-2 border-slate-200 bg-white text-slate-600 shadow-[0_4px_0_var(--color-slate-200)] hover:bg-slate-50 active:shadow-none;
+}
+
+@utility btn-danger {
+  @apply bg-heart-500 text-white shadow-[0_4px_0_#c9304d] hover:brightness-95 active:shadow-none;
+}
+
+@utility btn-ghost {
+  @apply text-slate-500 hover:bg-slate-100 active:translate-y-0;
+}
+
+@utility icon-btn {
+  @apply inline-flex size-9 cursor-pointer items-center justify-center rounded-xl text-slate-400 transition hover:bg-slate-100 hover:text-slate-700 disabled:pointer-events-none disabled:opacity-30;
+}
+
+@utility input {
+  @apply w-full rounded-2xl border-2 border-slate-200 bg-slate-50 px-4 py-3 font-semibold text-slate-800 outline-none transition placeholder:font-normal placeholder:text-slate-400 focus:border-grape-400 focus:bg-white;
+}
+
+@utility input-code {
+  @apply input font-mono text-sm font-normal;
+}
+
+@utility label {
+  @apply mb-1.5 block text-sm font-extrabold text-slate-600;
+}
+
+@utility card {
+  @apply rounded-3xl border-2 border-slate-200 bg-white p-5;
+}
+
+@utility badge {
+  @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-extrabold;
+}
+
+/* Lesson notes rendered from Markdown */
+.lesson-prose {
+  @apply space-y-3 text-lg leading-relaxed text-slate-700;
+}
+.lesson-prose h1,
+.lesson-prose h2,
+.lesson-prose h3 {
+  @apply font-black text-grape-900;
+}
+.lesson-prose h1 { @apply text-2xl; }
+.lesson-prose h2 { @apply text-xl; }
+.lesson-prose strong { @apply font-extrabold text-grape-900; }
+.lesson-prose a { @apply font-bold text-grape-600 underline; }
+.lesson-prose ul { @apply list-disc pl-6; }
+.lesson-prose ol { @apply list-decimal pl-6; }
+.lesson-prose code { @apply rounded-md bg-grape-50 px-1.5 py-0.5 font-mono text-base text-grape-700; }
+.lesson-prose pre { @apply overflow-x-auto rounded-2xl bg-grape-900 p-4 text-sm text-grape-50; }
+.lesson-prose pre code { @apply bg-transparent p-0 text-grape-50; }
