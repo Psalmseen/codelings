@@ -23,7 +23,10 @@ const transporter =
 export function parseAddress(address) {
   const cleaned = address.trim().replace(/^['"]|['"]$/g, '').trim();
   const match = cleaned.match(/^"?([^"<]*?)"?\s*<([^>]+)>$/);
-  return match ? { name: match[1].trim() || undefined, email: match[2].trim() } : { email: cleaned };
+  if (match) return { name: match[1].trim() || undefined, email: match[2].trim() };
+  // Also accept "Name email@x.com" without the angle brackets
+  const loose = cleaned.match(/^(.*?)\s*(\S+@\S+)$/);
+  return loose ? { name: loose[1].trim() || undefined, email: loose[2] } : { email: cleaned };
 }
 
 async function sendWithBrevo({ to, subject, html, text }) {
