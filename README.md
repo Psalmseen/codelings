@@ -34,6 +34,15 @@ npm run dev
 
 ## Sending real email without a domain
 
+**On Render's free plan, use Brevo** (outgoing SMTP is blocked there):
+
+1. Sign up free at [brevo.com](https://www.brevo.com).
+2. **Senders, domains & IPs → Senders → Add a sender:** add your Gmail address and click the link Brevo emails you.
+3. **SMTP & API → API keys → Generate a new API key.**
+4. Set `BREVO_API_KEY` to that key and `MAIL_FROM` to `Codelings <your-verified@gmail.com>`. When `BREVO_API_KEY` is set, the SMTP settings are ignored.
+
+**On hosts that allow SMTP**, Gmail works directly:
+
 Use a Gmail account with an App Password (about 500 emails/day):
 
 1. Turn on 2-Step Verification for the Google account.

@@ -49,7 +49,7 @@ router.post('/reminders/test', async (req, res) => {
   } catch (err) {
     return res.status(502).json({ error: `Email failed: ${err.message}` });
   }
-  if (!sent) return res.status(503).json({ error: 'Email is not configured on the server (SMTP_HOST is empty)' });
+  if (!sent) return res.status(503).json({ error: 'Email is not configured on the server (set BREVO_API_KEY, or SMTP_* settings)' });
   res.json({ sent: true, to: req.user.email });
 });
 

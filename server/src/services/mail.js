@@ -1,22 +1,54 @@
 import nodemailer from 'nodemailer';
 import { env } from '../config/env.js';
 
-const transporter = env.SMTP_HOST
-  ? nodemailer.createTransport({
-      host: env.SMTP_HOST,
-      port: env.SMTP_PORT,
-      secure: env.SMTP_PORT === 465,
-      auth: env.SMTP_USER ? { user: env.SMTP_USER, pass: env.SMTP_PASS } : undefined,
-    })
-  : null;
+const SEND_TIMEOUT_MS = 15000;
 
-/** Sends an email. Returns false (and logs) when SMTP isn't configured. */
-export async function sendMail({ to, subject, html, text }) {
+// Brevo's HTTP API is used when its key is set, because some hosts (e.g. Render's free plan)
+// block outgoing SMTP connections. Otherwise SMTP (Gmail in production, Mailpit in development).
+const transporter =
+  !env.BREVO_API_KEY && env.SMTP_HOST
+    ? nodemailer.createTransport({
+        host: env.SMTP_HOST,
+        port: env.SMTP_PORT,
+        secure: env.SMTP_PORT === 465,
+        auth: env.SMTP_USER ? { user: env.SMTP_USER, pass: env.SMTP_PASS } : undefined,
+        // Fail fast instead of hanging when the port is blocked
+        connectionTimeout: 10000,
+        greetingTimeout: 10000,
+        socketTimeout: SEND_TIMEOUT_MS,
+      })
+    : null;
+
+/** Splits `Name <email@x.com>` into its parts. */
+function parseAddress(address) {
+  const match = address.match(/^\s*"?([^"<]*?)"?\s*<([^>]+)>\s*$/);
+  return match ? { name: match[1].trim() || undefined, email: match[2].trim() } : { email: address.trim() };
+}
+
+async function sendWithBrevo({ to, subject, html, text }) {
+  const res = await fetch('https://api.brevo.com/v3/smtp/email', {
+    method: 'POST',
+    headers: { 'api-key': env.BREVO_API_KEY, 'content-type': 'application/json', accept: 'application/json' },
+    body: JSON.stringify({ sender: parseAddress(env.MAIL_FROM), to: [{ email: to }], subject, htmlContent: html, textContent: text }),
+    signal: AbortSignal.timeout(SEND_TIMEOUT_MS),
+  });
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(`Brevo rejected the email (${res.status}): ${body.message ?? res.statusText}`);
+  }
+}
+
+/** Sends an email. Returns false (and logs) when no email service is configured. */
+export async function sendMail(message) {
+  if (env.BREVO_API_KEY) {
+    await sendWithBrevo(message);
+    return true;
+  }
   if (!transporter) {
-    console.log(`[mail] SMTP not configured, skipped "${subject}" to ${to}`);
+    console.log(`[mail] Email not configured, skipped "${message.subject}" to ${message.to}`);
     return false;
   }
-  await transporter.sendMail({ from: env.MAIL_FROM, to, subject, html, text });
+  await transporter.sendMail({ from: env.MAIL_FROM, ...message });
   return true;
 }
 
