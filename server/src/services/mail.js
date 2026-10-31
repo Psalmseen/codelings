@@ -19,22 +19,27 @@ const transporter =
       })
     : null;
 
-/** Splits `Name <email@x.com>` into its parts. */
-function parseAddress(address) {
-  const match = address.match(/^\s*"?([^"<]*?)"?\s*<([^>]+)>\s*$/);
-  return match ? { name: match[1].trim() || undefined, email: match[2].trim() } : { email: address.trim() };
+/** Splits `Name <email@x.com>` (or a bare address) into its parts, ignoring stray quotes. */
+export function parseAddress(address) {
+  const cleaned = address.trim().replace(/^['"]|['"]$/g, '').trim();
+  const match = cleaned.match(/^"?([^"<]*?)"?\s*<([^>]+)>$/);
+  return match ? { name: match[1].trim() || undefined, email: match[2].trim() } : { email: cleaned };
 }
 
 async function sendWithBrevo({ to, subject, html, text }) {
+  const sender = parseAddress(env.MAIL_FROM);
   const res = await fetch('https://api.brevo.com/v3/smtp/email', {
     method: 'POST',
     headers: { 'api-key': env.BREVO_API_KEY, 'content-type': 'application/json', accept: 'application/json' },
-    body: JSON.stringify({ sender: parseAddress(env.MAIL_FROM), to: [{ email: to }], subject, htmlContent: html, textContent: text }),
+    body: JSON.stringify({ sender, to: [{ email: to }], subject, htmlContent: html, textContent: text }),
     signal: AbortSignal.timeout(SEND_TIMEOUT_MS),
   });
   if (!res.ok) {
     const body = await res.json().catch(() => ({}));
-    throw new Error(`Brevo rejected the email (${res.status}): ${body.message ?? res.statusText}`);
+    const senderHint = /sender/i.test(body.message ?? '')
+      ? ` Sender used: "${sender.email}". Check MAIL_FROM is like Codelings <you@gmail.com> and that address is verified in Brevo.`
+      : '';
+    throw new Error(`Brevo rejected the email (${res.status}): ${body.message ?? res.statusText}.${senderHint}`);
   }
 }
 
