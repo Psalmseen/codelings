@@ -190,7 +190,7 @@ export default function CourseBuilder() {
         >
           {course.emoji}
         </span>
-        <div className="min-w-0 flex-1">
+        <div className="min-w-0 flex-1 basis-56">
           <div className="flex items-center gap-2">
             <h1 className="truncate text-2xl font-black">{course.title}</h1>
             <StatusBadge status={course.status} />

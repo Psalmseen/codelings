@@ -72,7 +72,7 @@ export function AtRiskList() {
             <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-orange-400/15 font-black text-orange-300 light:text-orange-700">
               {student.name[0]?.toUpperCase()}
             </span>
-            <div className="min-w-0 flex-1">
+            <div className="min-w-0 flex-1 basis-56">
               <Link to={`/admin/students/${student._id}`} className="block truncate font-extrabold hover:text-neon-300 light:hover:text-neon-600">
                 {student.name}
               </Link>
@@ -112,7 +112,7 @@ export function RemindersCard() {
       <span className="flex size-12 items-center justify-center rounded-2xl bg-flame-500/15 text-flame-500">
         <BellRing className="size-6" />
       </span>
-      <div className="min-w-0 flex-1">
+      <div className="min-w-0 flex-1 basis-56">
         <p className="font-black">Automatic streak reminders are on</p>
         <p className="text-sm font-semibold text-ink-muted">
           At 7pm in each student's timezone, anyone with a streak who hasn't practised that day gets an email and a phone notification (if they turned

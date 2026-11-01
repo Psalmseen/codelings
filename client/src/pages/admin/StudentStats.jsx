@@ -152,7 +152,7 @@ export default function StudentStats() {
         <span className="flex size-16 items-center justify-center rounded-full bg-linear-to-br from-neon-500 to-plasma-500 text-2xl font-black text-white shadow-[0_0_24px_rgb(47_107_255/0.4)]">
           {student.name[0]?.toUpperCase()}
         </span>
-        <div className="min-w-0 flex-1">
+        <div className="min-w-0 flex-1 basis-56">
           <h1 className="truncate text-2xl font-black text-ink">{student.name}</h1>
           <p className="truncate text-sm font-semibold text-ink-muted">
             {student.email} · joined {formatDate(student.createdAt)} · last seen {timeAgo(student.lastSeenAt)}

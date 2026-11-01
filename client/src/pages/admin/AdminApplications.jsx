@@ -45,7 +45,7 @@ function ShareCard() {
       <span className="flex size-12 items-center justify-center rounded-2xl bg-neon-500/20 text-neon-300 light:text-neon-600">
         <Link2 className="size-6" />
       </span>
-      <div className="min-w-0 flex-1">
+      <div className="min-w-0 flex-1 basis-56">
         <p className="font-black text-ink">Your apply link</p>
         <p className="truncate font-mono text-sm text-ink-muted">{link}</p>
       </div>

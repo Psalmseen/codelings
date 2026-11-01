@@ -122,7 +122,7 @@ export default function AdminStudents() {
                 <span className="flex size-12 items-center justify-center rounded-full bg-neon-500/20 text-lg font-black text-neon-300 light:text-neon-700">
                   {student.name[0]?.toUpperCase()}
                 </span>
-                <div className="min-w-0 flex-1">
+                <div className="min-w-0 flex-1 basis-56">
                   <Link to={`/admin/students/${student._id}`} className="block truncate font-black hover:text-neon-300 light:hover:text-neon-600">
                     {student.name}
                   </Link>
@@ -154,7 +154,7 @@ export default function AdminStudents() {
                   const cohorts = cohortsByCourse.get(enrollment.courseId) ?? [];
                   return (
                     <div key={enrollment.courseId} className="flex flex-wrap items-center gap-3 rounded-2xl bg-tint/[0.03] px-3 py-2">
-                      <span className="min-w-0 flex-1 truncate font-extrabold text-ink-2">
+                      <span className="min-w-0 flex-1 basis-56 truncate font-extrabold text-ink-2">
                         {enrollment.emoji} {enrollment.title}
                       </span>
                       <span className="text-sm font-black text-ink-muted">{percent(enrollment.completed, enrollment.total)}%</span>
