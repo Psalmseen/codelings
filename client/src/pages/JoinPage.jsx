@@ -24,7 +24,7 @@ export default function JoinPage() {
     return (
       <div className="mx-auto max-w-md px-4 py-16">
         <EmptyState title="This invite doesn't work" mood="sad">
-          <p className="font-semibold text-slate-400">It may have expired or already been used. Ask your tutor for a new link.</p>
+          <p className="font-semibold text-ink-muted">It may have expired or already been used. Ask your tutor for a new link.</p>
           <Link to="/login" className="btn btn-secondary">
             I already have an account
           </Link>
@@ -53,7 +53,7 @@ export default function JoinPage() {
       {invite.courses.length > 0 && (
         <div className="mb-4 flex flex-wrap justify-center gap-2">
           {invite.courses.map((course) => (
-            <span key={course._id} className="badge bg-white/10 px-3 py-1.5 text-sm text-neon-200 ring-2 ring-neon-400/30">
+            <span key={course._id} className="badge bg-tint/10 px-3 py-1.5 text-sm text-neon-200 light:text-neon-700 ring-2 ring-neon-400/30">
               {course.emoji} {course.title}
             </span>
           ))}
@@ -71,7 +71,7 @@ export default function JoinPage() {
             type="email"
             required
             autoComplete="email"
-            className="input read-only:text-slate-500"
+            className="input read-only:text-ink-faint"
             readOnly={Boolean(invite.email)}
             {...field('email')}
           />

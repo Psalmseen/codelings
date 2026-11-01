@@ -88,7 +88,7 @@ export default function LessonEditor() {
 
   return (
     <div className="pb-28">
-      <Link to={backTo} className="mb-4 inline-flex items-center gap-1 text-sm font-extrabold text-slate-400 uppercase hover:text-slate-200">
+      <Link to={backTo} className="mb-4 inline-flex items-center gap-1 text-sm font-extrabold text-ink-muted uppercase hover:text-ink-soft">
         <ArrowLeft className="size-4" /> {data.course?.title} · {data.module?.title}
       </Link>
 
@@ -122,10 +122,10 @@ export default function LessonEditor() {
             value={draft.videoUrl}
             onChange={(e) => set({ videoUrl: e.target.value })}
           />
-          {draft.videoUrl && !embedUrl && <p className="mt-1 text-sm font-bold text-orange-400">This link can't be previewed. Is it a YouTube or Vimeo URL?</p>}
+          {draft.videoUrl && !embedUrl && <p className="mt-1 text-sm font-bold text-orange-400 light:text-orange-600">This link can't be previewed. Is it a YouTube or Vimeo URL?</p>}
           {embedUrl && (
             <iframe
-              className="mt-3 aspect-video w-full rounded-2xl bg-white/10"
+              className="mt-3 aspect-video w-full rounded-2xl bg-tint/10"
               src={embedUrl}
               title="Video preview"
               allow="accelerometer; encrypted-media; picture-in-picture"
@@ -149,7 +149,7 @@ export default function LessonEditor() {
       <section className="space-y-4">
         <h2 className="text-lg font-black">2. Practise ({draft.exercises.length})</h2>
         {draft.exercises.length === 0 && (
-          <p className="font-semibold text-slate-400">Add a few quick exercises. 3–6 short ones keep students hooked better than one long one.</p>
+          <p className="font-semibold text-ink-muted">Add a few quick exercises. 3–6 short ones keep students hooked better than one long one.</p>
         )}
         {draft.exercises.map((exercise, index) => (
           <ExerciseCard
@@ -176,7 +176,7 @@ export default function LessonEditor() {
               <button
                 key={type}
                 type="button"
-                className="flex cursor-pointer flex-col items-center gap-2 rounded-2xl border-2 border-white/10 p-4 font-extrabold transition hover:border-neon-400/60 hover:bg-neon-500/10"
+                className="flex cursor-pointer flex-col items-center gap-2 rounded-2xl border-2 border-tint/10 p-4 font-extrabold transition hover:border-neon-400/60 hover:bg-neon-500/10"
                 onClick={() => setExercises((list) => [...list, newExercise(type)])}
               >
                 <span className={`flex size-10 items-center justify-center rounded-xl ${meta.tint}`}>
@@ -195,7 +195,7 @@ export default function LessonEditor() {
         </ConfirmButton>
       </div>
 
-      <div className="fixed inset-x-0 bottom-0 z-30 border-t-2 border-white/10 glass-strong backdrop-blur lg:left-64">
+      <div className="fixed inset-x-0 bottom-0 z-30 border-t-2 border-tint/10 glass-strong backdrop-blur lg:left-64">
         <div className="mx-auto flex max-w-5xl items-center gap-4 px-4 py-3 lg:px-10">
           <div className="min-w-0 flex-1 text-sm font-bold">
             {issues.length > 0 ? (
@@ -205,7 +205,7 @@ export default function LessonEditor() {
                 ))}
               </ul>
             ) : (
-              <span className={dirty ? 'text-orange-400' : 'text-slate-400'}>{dirty ? 'Unsaved changes' : 'All changes saved'}</span>
+              <span className={dirty ? 'text-orange-400 light:text-orange-600' : 'text-ink-muted'}>{dirty ? 'Unsaved changes' : 'All changes saved'}</span>
             )}
           </div>
           <button className="btn btn-primary" disabled={saving || !dirty} onClick={save}>

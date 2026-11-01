@@ -60,7 +60,7 @@ export default function CourseForm({ initial, submitLabel, onSubmit }) {
               key={emoji}
               onClick={() => setForm({ ...form, emoji })}
               className={`size-11 cursor-pointer rounded-xl text-2xl transition ${
-                form.emoji === emoji ? 'bg-neon-500/20 ring-2 ring-neon-400' : 'bg-white/10 hover:bg-white/15'
+                form.emoji === emoji ? 'bg-neon-500/20 ring-2 ring-neon-400' : 'bg-tint/10 hover:bg-tint/15'
               }`}
             >
               {emoji}
@@ -95,11 +95,11 @@ export default function CourseForm({ initial, submitLabel, onSubmit }) {
               key={value}
               onClick={() => setForm({ ...form, pacing: value })}
               className={`cursor-pointer rounded-2xl border-2 p-3 text-left transition ${
-                form.pacing === value ? 'border-neon-400 bg-neon-500/10' : 'border-white/10 hover:bg-white/5'
+                form.pacing === value ? 'border-neon-400 bg-neon-500/10' : 'border-tint/10 hover:bg-tint/5'
               }`}
             >
               <span className="block font-black">{label}</span>
-              <span className="text-sm font-semibold text-slate-400">{hint}</span>
+              <span className="text-sm font-semibold text-ink-muted">{hint}</span>
             </button>
           ))}
         </div>

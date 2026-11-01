@@ -14,7 +14,7 @@ function StatCard({ icon: Icon, label, value, tint }) {
       </span>
       <div>
         <p className="text-2xl font-black">{value}</p>
-        <p className="text-sm font-bold text-slate-400">{label}</p>
+        <p className="text-sm font-bold text-ink-muted">{label}</p>
       </div>
     </div>
   );
@@ -31,15 +31,15 @@ export default function AdminDashboard() {
       {error && <ErrorState error={error} onRetry={reload} />}
       {data && (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <StatCard icon={Users} label="Students" value={data.students} tint="bg-neon-500/20 text-neon-300" />
-          <StatCard icon={Activity} label="Active in last 24h" value={data.activeToday} tint="bg-lime-400/15 text-lime-300" />
+          <StatCard icon={Users} label="Students" value={data.students} tint="bg-neon-500/20 text-neon-300 light:text-neon-700" />
+          <StatCard icon={Activity} label="Active in last 24h" value={data.activeToday} tint="bg-lime-400/15 text-lime-300 light:text-lime-700" />
           <StatCard
             icon={BookOpen}
             label={`Courses (${data.publishedCourses} live)`}
             value={data.courses}
-            tint="bg-sky-400/15 text-sky-300"
+            tint="bg-sky-400/15 text-sky-300 light:text-sky-700"
           />
-          <StatCard icon={Ticket} label="Pending invites" value={data.pendingInvites} tint="bg-orange-400/15 text-orange-300" />
+          <StatCard icon={Ticket} label="Pending invites" value={data.pendingInvites} tint="bg-orange-400/15 text-orange-300 light:text-orange-700" />
         </div>
       )}
 
@@ -51,19 +51,19 @@ export default function AdminDashboard() {
       <h2 className="mt-10 mb-4 text-xl font-black">Quick actions</h2>
       <div className="grid gap-4 sm:grid-cols-3">
         <Link to="/admin/courses?new=1" className="card transition hover:border-neon-400/60">
-          <BookOpen className="mb-2 size-7 text-neon-400" />
+          <BookOpen className="mb-2 size-7 text-neon-400 light:text-neon-600" />
           <p className="font-black">Build a course</p>
-          <p className="text-sm font-semibold text-slate-400">Add modules and lessons step by step</p>
+          <p className="text-sm font-semibold text-ink-muted">Add modules and lessons step by step</p>
         </Link>
         <Link to="/admin/invites" className="card transition hover:border-neon-400/60">
-          <Ticket className="mb-2 size-7 text-orange-400" />
+          <Ticket className="mb-2 size-7 text-orange-400 light:text-orange-600" />
           <p className="font-black">Invite a student</p>
-          <p className="text-sm font-semibold text-slate-400">Share a link by email or WhatsApp</p>
+          <p className="text-sm font-semibold text-ink-muted">Share a link by email or WhatsApp</p>
         </Link>
         <Link to="/admin/courses?import=1" className="card transition hover:border-neon-400/60">
           <Sparkles className="mb-2 size-7 text-flame-500" />
           <p className="font-black">Create a course with Claude</p>
-          <p className="text-sm font-semibold text-slate-400">Describe it, let Claude write it, import it in one go</p>
+          <p className="text-sm font-semibold text-ink-muted">Describe it, let Claude write it, import it in one go</p>
         </Link>
       </div>
     </>

@@ -56,7 +56,7 @@ function InlineTitle({ value, onSave, className }) {
         }}
       >
         <span className="truncate">{value}</span>
-        <Pencil className="size-4 shrink-0 text-slate-600 group-hover:text-slate-500" />
+        <Pencil className="size-4 shrink-0 text-ink-ghost group-hover:text-ink-faint" />
       </button>
     );
   }
@@ -87,9 +87,9 @@ function ModuleCard({ mod, index, isLast, onMove, mutate }) {
 
   return (
     <section className="card p-0">
-      <header className="flex items-center gap-2 border-b-2 border-white/5 px-5 py-4">
+      <header className="flex items-center gap-2 border-b-2 border-tint/5 px-5 py-4">
         <div className="min-w-0 flex-1">
-          <p className="text-xs font-black tracking-wider text-slate-400 uppercase">Module {index + 1}</p>
+          <p className="text-xs font-black tracking-wider text-ink-muted uppercase">Module {index + 1}</p>
           <InlineTitle className="text-lg font-black" value={mod.title} onSave={(title) => mutate(base, 'PATCH', { title }, 'Module renamed')} />
         </div>
         <button className="icon-btn" disabled={index === 0} onClick={() => onMove(-1)} aria-label="Move module up">
@@ -103,16 +103,16 @@ function ModuleCard({ mod, index, isLast, onMove, mutate }) {
         </ConfirmButton>
       </header>
 
-      <ol className="divide-y-2 divide-white/5">
+      <ol className="divide-y-2 divide-tint/5">
         {mod.lessons.map((lesson, i) => (
           <li key={lesson._id} className="flex items-center gap-3 px-5 py-3">
-            <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-white/10 text-sm font-black text-slate-400">{i + 1}</span>
-            <Link to={`/admin/lessons/${lesson._id}`} className="min-w-0 flex-1 hover:text-neon-300">
+            <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-tint/10 text-sm font-black text-ink-muted">{i + 1}</span>
+            <Link to={`/admin/lessons/${lesson._id}`} className="min-w-0 flex-1 hover:text-neon-300 light:hover:text-neon-700">
               <p className="truncate font-extrabold">{lesson.title}</p>
-              <p className="flex items-center gap-2 text-xs font-bold text-slate-400">
+              <p className="flex items-center gap-2 text-xs font-bold text-ink-muted">
                 {lesson.hasVideo && <PlayCircle className="size-3.5" />}
                 {lesson.exerciseCount} exercise{lesson.exerciseCount === 1 ? '' : 's'} · {lesson.xp} XP
-                {lesson.exerciseCount === 0 && <span className="badge bg-orange-400/15 text-orange-300">Needs exercises</span>}
+                {lesson.exerciseCount === 0 && <span className="badge bg-orange-400/15 text-orange-300 light:text-orange-700">Needs exercises</span>}
               </p>
             </Link>
             <button className="icon-btn" disabled={i === 0} onClick={() => mutate(`${base}/lessons/order`, 'PUT', { order: moved(lessonIds, i, -1) })} aria-label="Move lesson up">
@@ -179,7 +179,7 @@ export default function CourseBuilder() {
 
   return (
     <>
-      <Link to="/admin/courses" className="mb-4 inline-flex items-center gap-1 text-sm font-extrabold text-slate-400 uppercase hover:text-slate-200">
+      <Link to="/admin/courses" className="mb-4 inline-flex items-center gap-1 text-sm font-extrabold text-ink-muted uppercase hover:text-ink-soft">
         <ArrowLeft className="size-4" /> Courses
       </Link>
 
@@ -195,7 +195,7 @@ export default function CourseBuilder() {
             <h1 className="truncate text-2xl font-black">{course.title}</h1>
             <StatusBadge status={course.status} />
           </div>
-          <p className="text-sm font-bold text-slate-400">
+          <p className="text-sm font-bold text-ink-muted">
             {course.modules.length} modules · {lessonTotal} lessons · {course.pacing === 'cohort' ? 'Cohort' : 'Self-paced'}
           </p>
         </div>

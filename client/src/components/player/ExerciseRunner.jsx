@@ -113,7 +113,7 @@ export default function ExerciseRunner({ exercises, hearts = null, paused = fals
   } else if (phase === 'correct') {
     footer = (
       <PlayerFooter tone="correct">
-        <div className="flex flex-1 items-start gap-3 text-lime-300">
+        <div className="flex flex-1 items-start gap-3 text-lime-300 light:text-lime-700">
           <CircleCheck className="size-9 shrink-0" fill="white" />
           <div>
             <p className="text-xl font-black">{PRAISE[round % PRAISE.length]}</p>
@@ -128,7 +128,7 @@ export default function ExerciseRunner({ exercises, hearts = null, paused = fals
   } else if (phase === 'wrong') {
     footer = (
       <PlayerFooter tone="wrong">
-        <div className="flex min-w-0 flex-1 items-start gap-3 text-red-300">
+        <div className="flex min-w-0 flex-1 items-start gap-3 text-red-300 light:text-red-700">
           <CircleX className="size-9 shrink-0" fill="white" />
           <div className="min-w-0">
             <p className="text-xl font-black">Correct answer:</p>
@@ -145,7 +145,7 @@ export default function ExerciseRunner({ exercises, hearts = null, paused = fals
   } else {
     footer = (
       <PlayerFooter tone="wrong">
-        <div className="flex flex-1 items-start gap-3 text-red-300">
+        <div className="flex flex-1 items-start gap-3 text-red-300 light:text-red-700">
           <CircleX className="size-9 shrink-0" fill="white" />
           <div>
             <p className="text-xl font-black">Not quite yet</p>
@@ -168,7 +168,7 @@ export default function ExerciseRunner({ exercises, hearts = null, paused = fals
 
   return (
     <PlayerShell progress={solved / exercises.length} hearts={hearts} onClose={onClose} footer={footer} wide={isCode}>
-      <p className="mb-1 text-sm font-black tracking-wider text-neon-400 uppercase">{TYPE_LABELS[exercise.type]}</p>
+      <p className="mb-1 text-sm font-black tracking-wider text-neon-400 light:text-neon-600 uppercase">{TYPE_LABELS[exercise.type]}</p>
       <h1 className="mb-6 text-2xl font-black whitespace-pre-wrap sm:text-3xl">{exercise.prompt}</h1>
       {isCode ? (
         <Suspense fallback={<PageLoader />}>

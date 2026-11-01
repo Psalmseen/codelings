@@ -44,12 +44,12 @@ export default function LessonComplete({ result, onContinue }) {
       <div className="flex flex-col items-center pt-6 text-center">
         <Mascot size={140} mood="excited" className="animate-float" />
         <h1 className="mt-4 text-3xl font-black text-flame-500">{courseCompleted ? 'Course complete! 🏆' : 'Lesson complete!'}</h1>
-        {preview && <p className="mt-1 font-bold text-slate-400">Preview mode: nothing was saved</p>}
+        {preview && <p className="mt-1 font-bold text-ink-muted">Preview mode: nothing was saved</p>}
         {leveledUp && (
-          <p className="mt-3 rounded-2xl bg-sky-400/15 px-4 py-2 font-black text-sky-300">Level up! You're now level {user.levelInfo.level} 🎉</p>
+          <p className="mt-3 rounded-2xl bg-sky-400/15 px-4 py-2 font-black text-sky-300 light:text-sky-700">Level up! You're now level {user.levelInfo.level} 🎉</p>
         )}
         {freezeEarned && (
-          <p className="mt-3 rounded-2xl bg-cyan-400/10 px-4 py-2 font-black text-cyan-300">
+          <p className="mt-3 rounded-2xl bg-cyan-400/10 px-4 py-2 font-black text-cyan-300 light:text-cyan-700">
             🧊 {user.streak.current}-day streak! You earned a streak freeze. It saves your streak if you miss a day.
           </p>
         )}

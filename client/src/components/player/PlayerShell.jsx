@@ -27,7 +27,7 @@ export default function PlayerShell({ progress, hearts, onClose, footer, wide = 
         <div className="flex-1">{progress !== undefined && <ProgressBar value={progress * 100} color="var(--color-lime-500)" />}</div>
         <MuteToggle />
         {hearts !== null && hearts !== undefined && (
-          <span className={`flex items-center gap-1 text-lg font-black ${hearts > 0 ? 'text-heart-500' : 'text-slate-600'}`} title="Hearts">
+          <span className={`flex items-center gap-1 text-lg font-black ${hearts > 0 ? 'text-heart-500' : 'text-ink-ghost'}`} title="Hearts">
             <Heart className="size-6" fill="currentColor" /> {hearts}
           </span>
         )}
@@ -43,9 +43,9 @@ export default function PlayerShell({ progress, hearts, onClose, footer, wide = 
 /** Standard footer bar; `tone` colours it for correct / wrong feedback. */
 export function PlayerFooter({ tone = 'neutral', children }) {
   const tones = {
-    neutral: 'border-white/10 glass-strong',
-    correct: 'border-lime-400/40 bg-lime-950/90 backdrop-blur-xl shadow-[0_-10px_40px_rgb(163_230_53/0.15)]',
-    wrong: 'border-red-500/40 bg-red-950/90 backdrop-blur-xl shadow-[0_-10px_40px_rgb(255_77_109/0.15)]',
+    neutral: 'border-tint/10 glass-strong',
+    correct: 'border-lime-400/40 bg-lime-950/90 light:bg-lime-50/95 backdrop-blur-xl shadow-[0_-10px_40px_rgb(163_230_53/0.15)]',
+    wrong: 'border-red-500/40 bg-red-950/90 light:bg-red-50/95 backdrop-blur-xl shadow-[0_-10px_40px_rgb(255_77_109/0.15)]',
   };
   return (
     <div className={`border-t-2 ${tones[tone]}`}>

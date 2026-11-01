@@ -14,7 +14,7 @@ function LessonNode({ lesson, index, color, selected, onSelect }) {
   const styles = {
     completed: { backgroundColor: '#FBBF24', boxShadow: `0 6px 0 ${darken('#FBBF24')}, 0 0 24px #FBBF2466` },
     available: { backgroundColor: color, boxShadow: `0 6px 0 ${darken(color)}, 0 0 32px ${color}aa` },
-    locked: { backgroundColor: 'rgb(255 255 255 / 0.08)', boxShadow: '0 6px 0 rgb(255 255 255 / 0.04)', border: '1px solid rgb(255 255 255 / 0.1)' },
+    locked: { backgroundColor: 'color-mix(in srgb, var(--tint) 8%, transparent)', boxShadow: '0 6px 0 color-mix(in srgb, var(--tint) 4%, transparent)', border: '1px solid color-mix(in srgb, var(--tint) 10%, transparent)' },
   };
   const Icon = { completed: Check, available: Star, locked: Lock }[lesson.state];
 
@@ -35,7 +35,7 @@ function LessonNode({ lesson, index, color, selected, onSelect }) {
         style={styles[lesson.state]}
       >
         <Icon
-          className={`size-8 ${lesson.state === 'locked' ? 'text-slate-500' : 'text-white'}`}
+          className={`size-8 ${lesson.state === 'locked' ? 'text-ink-faint' : 'text-white'}`}
           fill={lesson.state === 'available' ? 'currentColor' : 'none'}
           strokeWidth={3}
         />
@@ -47,7 +47,7 @@ function LessonNode({ lesson, index, color, selected, onSelect }) {
 function LessonPopover({ lesson, color, waiting }) {
   const navigate = useNavigate();
   return (
-    <div className="mt-4 w-72 rounded-3xl p-4 text-white" style={lesson.state === 'locked' ? { backgroundColor: 'rgb(148 163 184 / 0.18)', border: '1px solid rgb(255 255 255 / 0.12)' } : { backgroundColor: color, boxShadow: `0 0 32px ${color}66` }}>
+    <div className="mt-4 w-72 rounded-3xl p-4 text-white" style={lesson.state === 'locked' ? { backgroundColor: 'rgb(148 163 184 / 0.18)', border: '1px solid color-mix(in srgb, var(--tint) 12%, transparent)' } : { backgroundColor: color, boxShadow: `0 0 32px ${color}66` }}>
       <h3 className="text-lg font-black">{lesson.title}</h3>
       {lesson.state === 'locked' ? (
         <p className="font-semibold text-white/90">
@@ -101,9 +101,9 @@ export default function CourseMap() {
           <Mascot size={72} className="shrink-0 animate-float" />
           <div>
             <p className="flex items-center gap-2 text-lg font-black">
-              <CalendarClock className="size-5 text-neon-400" /> Starts in {timeUntil(cohort.startDate)}
+              <CalendarClock className="size-5 text-neon-400 light:text-neon-600" /> Starts in {timeUntil(cohort.startDate)}
             </p>
-            <p className="font-semibold text-slate-400">
+            <p className="font-semibold text-ink-muted">
               {cohort.name} kicks off on {formatDate(cohort.startDate)}. Lessons unlock then. Get ready!
             </p>
           </div>
@@ -114,11 +114,11 @@ export default function CourseMap() {
       {modules.map((mod, moduleIndex) => (
         <section key={mod._id} className="mb-10">
           <div className="glass mb-10 rounded-2xl px-4 py-3">
-            <p className="text-xs font-black tracking-wider text-slate-400 uppercase">Module {moduleIndex + 1}</p>
+            <p className="text-xs font-black tracking-wider text-ink-muted uppercase">Module {moduleIndex + 1}</p>
             <h2 className="text-lg font-black">{mod.title}</h2>
           </div>
           {mod.lessons.length === 0 ? (
-            <p className="text-center font-semibold text-slate-400">Lessons coming soon</p>
+            <p className="text-center font-semibold text-ink-muted">Lessons coming soon</p>
           ) : (
             <div className="flex flex-col items-center gap-8">
               {mod.lessons.map((lesson, index) => (

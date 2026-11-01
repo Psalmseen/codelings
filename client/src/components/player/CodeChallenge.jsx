@@ -4,6 +4,7 @@ import { html } from '@codemirror/lang-html';
 import { javascript } from '@codemirror/lang-javascript';
 import CodeMirror from '@uiw/react-codemirror';
 import { CircleCheck, CircleX, Target } from 'lucide-react';
+import { useTheme } from '../../context/ThemeContext';
 
 const TABS = [
   { key: 'html', label: 'HTML', extension: html() },
@@ -36,6 +37,7 @@ window.addEventListener('load', function () {
 }
 
 export default function CodeChallenge({ exercise, value, onChange, locked, ref }) {
+  const { resolved: theme } = useTheme();
   const [tab, setTab] = useState(exercise.starter?.html || !exercise.starter?.js ? 'html' : 'js');
   const [doc, setDoc] = useState(() => buildDocument(value));
   const [results, setResults] = useState(null);
@@ -83,13 +85,13 @@ export default function CodeChallenge({ exercise, value, onChange, locked, ref }
 
   return (
     <div className="grid gap-4 lg:grid-cols-2">
-      <div className="flex flex-col overflow-hidden rounded-3xl border-2 border-white/10">
-        <div className="flex border-b-2 border-white/10 bg-white/[0.03]">
+      <div className="flex flex-col overflow-hidden rounded-3xl border-2 border-tint/10">
+        <div className="flex border-b-2 border-tint/10 bg-tint/[0.03]">
           {TABS.map((t) => (
             <button
               key={t.key}
               onClick={() => setTab(t.key)}
-              className={`cursor-pointer px-4 py-2.5 text-sm font-black transition ${tab === t.key ? 'bg-white/10 text-neon-300' : 'text-slate-400 hover:text-slate-200'}`}
+              className={`cursor-pointer px-4 py-2.5 text-sm font-black transition ${tab === t.key ? 'bg-tint/10 text-neon-300 light:text-neon-700' : 'text-ink-muted hover:text-ink-soft'}`}
             >
               {t.label}
             </button>
@@ -100,7 +102,7 @@ export default function CodeChallenge({ exercise, value, onChange, locked, ref }
           height="100%"
           extensions={[current.extension]}
           editable={!locked}
-          theme="dark"
+          theme={theme}
           basicSetup={{ foldGutter: false, highlightActiveLine: !locked }}
           onChange={(text) => onChange({ ...value, [tab]: text })}
           className="min-h-[280px] flex-1 text-sm"
@@ -108,13 +110,13 @@ export default function CodeChallenge({ exercise, value, onChange, locked, ref }
       </div>
 
       <div className="flex flex-col gap-4">
-        <div className="overflow-hidden rounded-3xl border-2 border-white/10">
-          <div className="border-b-2 border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm font-black text-slate-400">Preview</div>
+        <div className="overflow-hidden rounded-3xl border-2 border-tint/10">
+          <div className="border-b-2 border-tint/10 bg-tint/[0.03] px-4 py-2.5 text-sm font-black text-ink-muted">Preview</div>
           <iframe ref={iframeRef} title="Your page" sandbox="allow-scripts" srcDoc={doc} className="h-56 w-full bg-white" />
         </div>
 
-        <div className="rounded-3xl border-2 border-white/10 p-4">
-          <p className="mb-2 flex items-center gap-2 text-sm font-black text-slate-400">
+        <div className="rounded-3xl border-2 border-tint/10 p-4">
+          <p className="mb-2 flex items-center gap-2 text-sm font-black text-ink-muted">
             <Target className="size-4" /> Goals
           </p>
           <ul className="space-y-1.5">
@@ -123,13 +125,13 @@ export default function CodeChallenge({ exercise, value, onChange, locked, ref }
               return (
                 <li key={i} className="flex items-start gap-2 font-bold">
                   {result?.passed ? (
-                    <CircleCheck className="mt-0.5 size-5 shrink-0 text-lime-400" />
+                    <CircleCheck className="mt-0.5 size-5 shrink-0 text-lime-400 light:text-lime-600" />
                   ) : result ? (
                     <CircleX className="mt-0.5 size-5 shrink-0 text-heart-500" />
                   ) : (
-                    <span className="mt-1 size-4 shrink-0 rounded-full border-2 border-white/20" />
+                    <span className="mt-1 size-4 shrink-0 rounded-full border-2 border-tint/20" />
                   )}
-                  <span className={result && !result.passed ? 'text-heart-500' : 'text-slate-200'}>{test.label}</span>
+                  <span className={result && !result.passed ? 'text-heart-500' : 'text-ink-soft'}>{test.label}</span>
                 </li>
               );
             })}

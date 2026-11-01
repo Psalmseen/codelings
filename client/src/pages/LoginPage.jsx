@@ -10,8 +10,8 @@ export function AuthShell({ title, subtitle, children }) {
       <div className="w-full max-w-sm">
         <div className="mb-6 flex flex-col items-center text-center">
           <Mascot size={110} className="animate-float" />
-          <h1 className="mt-3 text-3xl font-black text-white">{title}</h1>
-          {subtitle && <p className="mt-1 font-semibold text-slate-400">{subtitle}</p>}
+          <h1 className="mt-3 text-3xl font-black text-ink">{title}</h1>
+          {subtitle && <p className="mt-1 font-semibold text-ink-muted">{subtitle}</p>}
         </div>
         {children}
       </div>
@@ -72,7 +72,7 @@ export default function LoginPage() {
           {busy ? <Spinner /> : 'Sign in'}
         </button>
       </form>
-      <p className="mt-4 text-center text-sm font-semibold text-slate-400">
+      <p className="mt-4 text-center text-sm font-semibold text-ink-muted">
         New here? Open the invite link your tutor sent you.
       </p>
     </AuthShell>

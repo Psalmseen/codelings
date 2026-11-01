@@ -2,10 +2,10 @@ import { ArrowDown, ArrowDownUp, ArrowUp, Code2, ListChecks, Plus, TextCursorInp
 import { ConfirmButton } from '../ui';
 
 export const EXERCISE_TYPES = {
-  mcq: { label: 'Multiple choice', icon: ListChecks, tint: 'bg-sky-400/15 text-sky-300' },
-  fill_blank: { label: 'Fill in the blank', icon: TextCursorInput, tint: 'bg-lime-400/15 text-lime-300' },
-  order_code: { label: 'Arrange the code', icon: ArrowDownUp, tint: 'bg-orange-400/15 text-orange-300' },
-  code_challenge: { label: 'Code challenge', icon: Code2, tint: 'bg-neon-500/20 text-neon-300' },
+  mcq: { label: 'Multiple choice', icon: ListChecks, tint: 'bg-sky-400/15 text-sky-300 light:text-sky-700' },
+  fill_blank: { label: 'Fill in the blank', icon: TextCursorInput, tint: 'bg-lime-400/15 text-lime-300 light:text-lime-700' },
+  order_code: { label: 'Arrange the code', icon: ArrowDownUp, tint: 'bg-orange-400/15 text-orange-300 light:text-orange-700' },
+  code_challenge: { label: 'Code challenge', icon: Code2, tint: 'bg-neon-500/20 text-neon-300 light:text-neon-700' },
 };
 
 export function newExercise(type) {
@@ -98,7 +98,7 @@ function FillBlankFields({ exercise, update }) {
           ))}
         </div>
       ) : (
-        <p className="text-sm font-bold text-orange-400">Add at least one ___ blank.</p>
+        <p className="text-sm font-bold text-orange-400 light:text-orange-600">Add at least one ___ blank.</p>
       )}
     </>
   );
@@ -112,7 +112,7 @@ function OrderCodeFields({ exercise, update }) {
       <div className="space-y-2">
         {lines.map((line, i) => (
           <div key={i} className="flex items-center gap-2">
-            <span className="w-6 shrink-0 text-right font-mono text-sm font-bold text-slate-400">{i + 1}</span>
+            <span className="w-6 shrink-0 text-right font-mono text-sm font-bold text-ink-muted">{i + 1}</span>
             <input className="input-code py-2.5" value={line} onChange={(e) => update({ lines: replaceAt(lines, i, e.target.value) })} />
             <button type="button" className="icon-btn" disabled={lines.length <= 2} onClick={() => update({ lines: removeAt(lines, i) })} aria-label="Remove line">
               <X className="size-4" />
@@ -147,13 +147,13 @@ function CodeChallengeFields({ exercise, update }) {
       </div>
       <div>
         <span className="label">Checks (all must pass)</span>
-        <p className="mb-2 text-xs font-semibold text-slate-400">
+        <p className="mb-2 text-xs font-semibold text-ink-muted">
           Each check is a JavaScript expression that's true when the task is done, run against the student's page. Example:{' '}
-          <code className="rounded bg-white/10 px-1">document.querySelector('h1')?.textContent.trim() === 'Hi'</code>
+          <code className="rounded bg-tint/10 px-1">document.querySelector('h1')?.textContent.trim() === 'Hi'</code>
         </p>
         <div className="space-y-3">
           {tests.map((test, i) => (
-            <div key={i} className="flex items-start gap-2 rounded-2xl bg-white/[0.03] p-3">
+            <div key={i} className="flex items-start gap-2 rounded-2xl bg-tint/[0.03] p-3">
               <div className="flex-1 space-y-2">
                 <input
                   className="input py-2.5"

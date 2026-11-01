@@ -21,27 +21,27 @@ export default function CohortsCard({ cohorts, mutate }) {
 
   return (
     <section className="card mb-6 p-0">
-      <header className="flex items-center gap-3 border-b-2 border-white/5 px-5 py-4">
-        <Users className="size-6 text-neon-400" />
+      <header className="flex items-center gap-3 border-b-2 border-tint/5 px-5 py-4">
+        <Users className="size-6 text-neon-400 light:text-neon-600" />
         <div>
           <h2 className="text-lg font-black">Cohorts</h2>
-          <p className="text-sm font-bold text-slate-400">Students in a cohort start on the same day and share a private leaderboard.</p>
+          <p className="text-sm font-bold text-ink-muted">Students in a cohort start on the same day and share a private leaderboard.</p>
         </div>
       </header>
 
       {cohorts.length > 0 && (
-        <ul className="divide-y-2 divide-white/5">
+        <ul className="divide-y-2 divide-tint/5">
           {cohorts.map((cohort) => {
             const started = new Date(cohort.startDate) <= new Date();
             return (
               <li key={cohort._id} className="flex items-center gap-3 px-5 py-3">
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-extrabold">{cohort.name}</p>
-                  <p className="text-sm font-bold text-slate-400">
+                  <p className="text-sm font-bold text-ink-muted">
                     {started ? 'Started' : 'Starts'} {formatDate(cohort.startDate)} · {cohort.studentCount} student{cohort.studentCount === 1 ? '' : 's'}
                   </p>
                 </div>
-                <span className={`badge ${started ? 'bg-lime-400/15 text-lime-300' : 'bg-orange-400/15 text-orange-300'}`}>{started ? 'Running' : 'Upcoming'}</span>
+                <span className={`badge ${started ? 'bg-lime-400/15 text-lime-300 light:text-lime-700' : 'bg-orange-400/15 text-orange-300 light:text-orange-700'}`}>{started ? 'Running' : 'Upcoming'}</span>
                 <ConfirmButton title="Delete cohort (students stay enrolled)" confirmLabel="Delete?" onConfirm={() => mutate(`/cohorts/${cohort._id}`, 'DELETE', undefined, 'Cohort deleted')}>
                   <Trash2 className="size-5" />
                 </ConfirmButton>

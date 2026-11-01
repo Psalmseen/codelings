@@ -7,9 +7,9 @@ import { api } from '../../lib/api';
 import { timeAgo } from '../../lib/format';
 
 const STATUS_STYLES = {
-  pending: 'bg-orange-400/15 text-orange-300',
-  used: 'bg-lime-400/15 text-lime-300',
-  expired: 'bg-white/10 text-slate-400',
+  pending: 'bg-orange-400/15 text-orange-300 light:text-orange-700',
+  used: 'bg-lime-400/15 text-lime-300 light:text-lime-700',
+  expired: 'bg-tint/10 text-ink-muted',
 };
 
 const whatsappLink = (invite) =>
@@ -83,7 +83,7 @@ function InviteForm({ courses, onCreated }) {
       <div>
         <span className="label">Courses they get</span>
         {courses.length === 0 ? (
-          <p className="text-sm font-bold text-slate-400">No courses yet. You can enrol them later from Students.</p>
+          <p className="text-sm font-bold text-ink-muted">No courses yet. You can enrol them later from Students.</p>
         ) : (
           <div className="flex flex-wrap gap-2">
             {courses.map((course) => {
@@ -94,11 +94,11 @@ function InviteForm({ courses, onCreated }) {
                   key={course._id}
                   onClick={() => toggleCourse(course._id)}
                   className={`cursor-pointer rounded-2xl border-2 px-3 py-2 text-sm font-extrabold transition ${
-                    selected ? 'border-neon-400 bg-neon-500/10 text-neon-200' : 'border-white/10 text-slate-400 hover:bg-white/5'
+                    selected ? 'border-neon-400 bg-neon-500/10 text-neon-200 light:text-neon-700' : 'border-tint/10 text-ink-muted hover:bg-tint/5'
                   }`}
                 >
                   {course.emoji} {course.title}
-                  {course.status === 'draft' && <span className="ml-1 text-slate-400">(draft)</span>}
+                  {course.status === 'draft' && <span className="ml-1 text-ink-muted">(draft)</span>}
                 </button>
               );
             })}
@@ -130,7 +130,7 @@ function InviteForm({ courses, onCreated }) {
         ))}
 
       <div className="flex flex-wrap items-center gap-4">
-        <label className="flex items-center gap-2 font-bold text-slate-300">
+        <label className="flex items-center gap-2 font-bold text-ink-2">
           Expires in
           <select className="input w-auto py-2" value={form.expiresInDays} onChange={(e) => setForm({ ...form, expiresInDays: Number(e.target.value) })}>
             {[3, 7, 14, 30, 90].map((d) => (
@@ -140,7 +140,7 @@ function InviteForm({ courses, onCreated }) {
             ))}
           </select>
         </label>
-        <label className={`flex items-center gap-2 font-bold ${form.email ? 'text-slate-300' : 'text-slate-600'}`}>
+        <label className={`flex items-center gap-2 font-bold ${form.email ? 'text-ink-2' : 'text-ink-ghost'}`}>
           <input
             type="checkbox"
             className="size-5 accent-neon-500"
@@ -191,7 +191,7 @@ export default function AdminInvites() {
 
       {created && (
         <div className="card mt-4 border-lime-400/40 bg-lime-400/10">
-          <p className="mb-2 font-black text-lime-300">Invite ready! 🎉</p>
+          <p className="mb-2 font-black text-lime-300 light:text-lime-700">Invite ready! 🎉</p>
           <p className="mb-3 truncate rounded-xl bg-black/30 px-3 py-2 font-mono text-sm">{created.invite.link}</p>
           <ShareButtons invite={created.invite} />
         </div>
@@ -199,7 +199,7 @@ export default function AdminInvites() {
 
       <h2 className="mt-10 mb-4 text-xl font-black">All invites</h2>
       {invites.error && <ErrorState error={invites.error} onRetry={invites.reload} />}
-      {invites.data?.invites.length === 0 && <p className="font-semibold text-slate-400">No invites yet.</p>}
+      {invites.data?.invites.length === 0 && <p className="font-semibold text-ink-muted">No invites yet.</p>}
       <div className="space-y-3">
         {invites.data?.invites.map((invite) => (
           <div key={invite._id} className="card flex flex-wrap items-center gap-3 py-4">
@@ -208,7 +208,7 @@ export default function AdminInvites() {
                 <p className="truncate font-black">{invite.usedBy?.name ?? (invite.name || invite.email || 'Open invite')}</p>
                 <span className={`badge ${STATUS_STYLES[invite.status]}`}>{invite.status}</span>
               </div>
-              <p className="truncate text-sm font-semibold text-slate-400">
+              <p className="truncate text-sm font-semibold text-ink-muted">
                 {invite.courses.map((c) => `${c.emoji} ${c.title}`).join(', ') || 'No courses'}
                 {invite.cohorts?.length > 0 && ` (${invite.cohorts.map((c) => c.name).join(', ')})`} · created {timeAgo(invite.createdAt)}
               </p>

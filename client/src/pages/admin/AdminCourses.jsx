@@ -9,9 +9,9 @@ import { courseGlow } from '../../lib/format';
 
 export function StatusBadge({ status }) {
   return status === 'published' ? (
-    <span className="badge bg-lime-400/15 text-lime-300">Live</span>
+    <span className="badge bg-lime-400/15 text-lime-300 light:text-lime-700">Live</span>
   ) : (
-    <span className="badge bg-white/10 text-slate-400">Draft</span>
+    <span className="badge bg-tint/10 text-ink-muted">Draft</span>
   );
 }
 
@@ -50,7 +50,7 @@ export default function AdminCourses() {
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {data?.courses.map((course) => (
-          <Link key={course._id} to={`/admin/courses/${course._id}`} className="card transition hover:-translate-y-0.5 hover:border-white/25">
+          <Link key={course._id} to={`/admin/courses/${course._id}`} className="card transition hover:-translate-y-0.5 hover:border-tint/25">
             <div className="mb-3 flex items-start justify-between">
               <span
                 className="flex size-14 items-center justify-center rounded-2xl text-3xl"
@@ -61,7 +61,7 @@ export default function AdminCourses() {
               <StatusBadge status={course.status} />
             </div>
             <h3 className="text-lg font-black">{course.title}</h3>
-            <p className="text-sm font-bold text-slate-400">
+            <p className="text-sm font-bold text-ink-muted">
               {course.moduleCount} modules · {course.lessonCount} lessons · {course.studentCount} students
             </p>
           </Link>

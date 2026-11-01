@@ -30,7 +30,7 @@ function ContinueCard({ course, atRisk, streak }) {
     >
       {atRisk && (
         <p className="flex items-center gap-2 bg-black/20 px-5 py-2 text-sm font-black">
-          <Flame className="size-4 text-flame-400" fill="currentColor" /> Keep your {streak}-day streak alive today
+          <Flame className="size-4 text-flame-400 light:text-flame-600" fill="currentColor" /> Keep your {streak}-day streak alive today
         </p>
       )}
       <div className="flex items-center gap-4 p-5">
@@ -59,10 +59,10 @@ export default function LearnHome() {
     <div className="space-y-6">
       <section className="flex items-center gap-4">
         <Mascot size={84} mood={status.atRisk ? 'happy' : 'excited'} className="shrink-0 animate-float" />
-        <div className="relative flex-1 rounded-3xl border border-white/10 bg-night-800 p-4 shadow-[0_0_30px_rgb(47_107_255/0.15)]">
-          <span className="absolute top-1/2 -left-2 size-4 -translate-y-1/2 rotate-45 border-b border-l border-white/10 bg-night-800" />
+        <div className="relative flex-1 rounded-3xl border border-tint/10 bg-surface p-4 shadow-[0_0_30px_rgb(47_107_255/0.15)]">
+          <span className="absolute top-1/2 -left-2 size-4 -translate-y-1/2 rotate-45 border-b border-l border-tint/10 bg-surface" />
           <p className="text-lg font-black">Hi {firstName(user.name)}! 👋</p>
-          <p className={`font-semibold ${status.atRisk ? 'text-flame-500' : 'text-slate-400'}`}>{greeting(status)}</p>
+          <p className={`font-semibold ${status.atRisk ? 'text-flame-500' : 'text-ink-muted'}`}>{greeting(status)}</p>
         </div>
       </section>
 
@@ -71,20 +71,20 @@ export default function LearnHome() {
       <section className="card">
         <div className="mb-2 flex items-center justify-between font-black">
           <span>Level {level.level}</span>
-          <span className="text-sm text-slate-400">
+          <span className="text-sm text-ink-muted">
             {level.xpIntoLevel} / {level.xpForNext} XP
           </span>
         </div>
         <ProgressBar value={percent(level.xpIntoLevel, level.xpForNext)} color="var(--color-sky-400)" />
       </section>
 
-      <Link to="/learn/practice" className="card flex items-center gap-4 transition hover:-translate-y-0.5 hover:border-white/25">
+      <Link to="/learn/practice" className="card flex items-center gap-4 transition hover:-translate-y-0.5 hover:border-tint/25">
         <span className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-heart-500 text-white shadow-[0_4px_0_#c9304d]">
           <Heart className="size-6" fill="currentColor" />
         </span>
         <div className="flex-1">
           <p className="font-black">Practice round</p>
-          <p className="text-sm font-semibold text-slate-400">
+          <p className="text-sm font-semibold text-ink-muted">
             {hearts < MAX_HEARTS ? `You have ${hearts} of ${MAX_HEARTS} hearts. Practise to refill them!` : 'Quick review of what you have learned'}
           </p>
         </div>
@@ -96,7 +96,7 @@ export default function LearnHome() {
         {error && <ErrorState error={error} onRetry={reload} />}
         {data?.courses.length === 0 && (
           <EmptyState title="No courses yet">
-            <p className="font-semibold text-slate-400">Your tutor will add you to a course soon. Check back shortly!</p>
+            <p className="font-semibold text-ink-muted">Your tutor will add you to a course soon. Check back shortly!</p>
           </EmptyState>
         )}
         <div className="space-y-4">
@@ -107,7 +107,7 @@ export default function LearnHome() {
               <Link
                 key={course._id}
                 to={`/learn/courses/${course._id}`}
-                className="card flex items-center gap-4 transition hover:-translate-y-0.5 hover:border-white/25"
+                className="card flex items-center gap-4 transition hover:-translate-y-0.5 hover:border-tint/25"
               >
                 <span
                   className="flex size-16 shrink-0 items-center justify-center rounded-2xl text-3xl"
@@ -117,13 +117,13 @@ export default function LearnHome() {
                 </span>
                 <div className="min-w-0 flex-1">
                   <h3 className="truncate text-lg font-black">{course.title}</h3>
-                  <p className="mb-2 text-sm font-bold text-slate-400">
+                  <p className="mb-2 text-sm font-bold text-ink-muted">
                     {course.completed} of {course.total} lessons
                   </p>
                   <ProgressBar value={progress} color={course.color} className="h-3" />
                 </div>
                 {course.cohort && !course.cohort.started ? (
-                  <span className="badge shrink-0 bg-neon-500/20 py-1 text-neon-300">Starts in {timeUntil(course.cohort.startDate)}</span>
+                  <span className="badge shrink-0 bg-neon-500/20 py-1 text-neon-300 light:text-neon-700">Starts in {timeUntil(course.cohort.startDate)}</span>
                 ) : (
                   <span className="btn btn-primary btn-sm hidden sm:inline-flex">
                     {finished ? 'Review' : course.completed ? 'Continue' : 'Start'}

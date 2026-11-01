@@ -51,8 +51,8 @@ export function Logo({ size = 36, admin = false }) {
   return (
     <span className="flex items-center gap-2">
       <Mascot size={size} />
-      <span className="bg-linear-to-r from-neon-300 to-plasma-400 bg-clip-text text-xl font-black tracking-tight text-transparent">codelings</span>
-      {admin && <span className="badge bg-neon-500/20 text-neon-300">Admin</span>}
+      <span className="bg-linear-to-r from-neon-300 to-plasma-400 bg-clip-text light:from-neon-600 light:to-plasma-600 text-xl font-black tracking-tight text-transparent">codelings</span>
+      {admin && <span className="badge bg-neon-500/20 text-neon-300 light:text-neon-700">Admin</span>}
     </span>
   );
 }

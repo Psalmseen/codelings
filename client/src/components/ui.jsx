@@ -8,7 +8,7 @@ export function Spinner({ className = 'size-5' }) {
 
 export function PageLoader() {
   return (
-    <div className="flex min-h-[40vh] items-center justify-center text-neon-400">
+    <div className="flex min-h-[40vh] items-center justify-center text-neon-400 light:text-neon-600">
       <Spinner className="size-8" />
     </div>
   );
@@ -18,7 +18,7 @@ export function ErrorState({ error, onRetry }) {
   return (
     <div className="card flex flex-col items-center gap-3 py-10 text-center">
       <Mascot size={80} mood="sad" />
-      <p className="font-bold text-slate-300">{error?.message ?? 'Something went wrong'}</p>
+      <p className="font-bold text-ink-2">{error?.message ?? 'Something went wrong'}</p>
       {onRetry && (
         <button className="btn btn-secondary" onClick={onRetry}>
           Try again
@@ -40,7 +40,7 @@ export function EmptyState({ title, children, mood = 'happy' }) {
 
 export function ProgressBar({ value, color = 'var(--color-neon-500)', className = 'h-4' }) {
   return (
-    <div className={`overflow-hidden rounded-full bg-white/10 ${className}`}>
+    <div className={`overflow-hidden rounded-full bg-tint/10 ${className}`}>
       <div
         className="relative h-full rounded-full transition-[width] duration-500"
         style={{ width: `${Math.min(100, Math.max(0, value))}%`, backgroundColor: color, boxShadow: `0 0 14px ${color}` }}
@@ -56,7 +56,7 @@ export function PageHeader({ title, subtitle, children }) {
     <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
       <div>
         <h1 className="text-2xl font-black sm:text-3xl">{title}</h1>
-        {subtitle && <p className="mt-1 font-semibold text-slate-400">{subtitle}</p>}
+        {subtitle && <p className="mt-1 font-semibold text-ink-muted">{subtitle}</p>}
       </div>
       {children && <div className="flex flex-wrap gap-2">{children}</div>}
     </div>
@@ -71,7 +71,7 @@ export function Modal({ title, onClose, wide = false, children }) {
   }, [onClose]);
 
   return (
-    <div className="fixed inset-0 z-40 flex items-end justify-center bg-night-950/70 p-0 sm:items-center sm:p-4" onClick={onClose}>
+    <div className="fixed inset-0 z-40 flex items-end justify-center bg-night-950/70 light:bg-night-800/25 p-0 sm:items-center sm:p-4" onClick={onClose}>
       <div
         className={`max-h-[92dvh] w-full ${wide ? 'max-w-2xl' : 'max-w-lg'} overflow-y-auto rounded-t-3xl glass-strong p-6 sm:rounded-3xl`}
         onClick={(e) => e.stopPropagation()}

@@ -4,6 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#070A1A" />
+    <script>
+      // Apply the saved theme before first paint (see src/context/ThemeContext.jsx)
+      try {
+        var pref = localStorage.getItem('codelings_theme') || 'system';
+        if (pref === 'light' || (pref === 'system' && matchMedia('(prefers-color-scheme: light)').matches)) {
+          document.documentElement.classList.add('light');
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#EEF1FF');
+        }
+      } catch (e) {}
+    </script>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />

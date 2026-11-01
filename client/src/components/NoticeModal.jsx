@@ -59,7 +59,7 @@ export default function NoticeModal() {
           <span className="absolute -right-3 -bottom-1 text-5xl">{info.icon}</span>
         </div>
         <h2 className="text-2xl font-black">{info.title}</h2>
-        <p className="font-semibold text-slate-400">{info.body}</p>
+        <p className="font-semibold text-ink-muted">{info.body}</p>
         <button className="btn btn-primary mt-2 w-full" onClick={dismiss} disabled={busy} autoFocus>
           {busy ? <Spinner /> : 'Got it'}
         </button>

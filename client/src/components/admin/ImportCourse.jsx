@@ -20,23 +20,23 @@ function Preview({ summary }) {
   const exercises = lessons.flatMap((l) => l.exerciseTypes);
   return (
     <div className="rounded-2xl border-2 border-lime-400/40 bg-lime-400/10 p-4">
-      <p className="font-black text-lime-300">
+      <p className="font-black text-lime-300 light:text-lime-700">
         {summary.emoji} {summary.title}
       </p>
-      <p className="mb-3 text-sm font-bold text-lime-300">
+      <p className="mb-3 text-sm font-bold text-lime-300 light:text-lime-700">
         {summary.modules.length} modules · {lessons.length} lessons · {exercises.length} exercises
       </p>
       <ol className="max-h-56 space-y-2 overflow-y-auto pr-1 text-sm">
         {summary.modules.map((mod, i) => (
           <li key={i}>
-            <p className="font-extrabold text-slate-200">
+            <p className="font-extrabold text-ink-soft">
               {i + 1}. {mod.title}
             </p>
-            <ul className="ml-5 list-disc font-semibold text-slate-400">
+            <ul className="ml-5 list-disc font-semibold text-ink-muted">
               {mod.lessons.map((lesson, j) => (
                 <li key={j}>
                   {lesson.title}{' '}
-                  <span className="text-slate-400">({lesson.exerciseTypes.map((t) => EXERCISE_TYPES[t].label.toLowerCase()).join(', ')})</span>
+                  <span className="text-ink-muted">({lesson.exerciseTypes.map((t) => EXERCISE_TYPES[t].label.toLowerCase()).join(', ')})</span>
                 </li>
               ))}
             </ul>
@@ -110,7 +110,7 @@ export default function ImportCourse({ onImported }) {
             onChange={(e) => set({ topic: e.target.value })}
           />
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-            <label className="text-sm font-bold text-slate-400">
+            <label className="text-sm font-bold text-ink-muted">
               Audience
               <select className="input mt-1 py-2" value={request.audience} onChange={(e) => set({ audience: e.target.value })}>
                 <option>Complete beginners</option>
@@ -118,11 +118,11 @@ export default function ImportCourse({ onImported }) {
                 <option>Intermediate learners</option>
               </select>
             </label>
-            <label className="text-sm font-bold text-slate-400">
+            <label className="text-sm font-bold text-ink-muted">
               Modules
               <input type="number" min={1} max={10} className="input mt-1 py-2" value={request.moduleCount} onChange={(e) => set({ moduleCount: Number(e.target.value) })} />
             </label>
-            <label className="text-sm font-bold text-slate-400">
+            <label className="text-sm font-bold text-ink-muted">
               Lessons per module
               <input type="number" min={1} max={10} className="input mt-1 py-2" value={request.lessonsPerModule} onChange={(e) => set({ lessonsPerModule: Number(e.target.value) })} />
             </label>
@@ -135,7 +135,7 @@ export default function ImportCourse({ onImported }) {
               <ExternalLink className="size-4" /> Open Claude
             </a>
           </div>
-          <p className="text-xs font-semibold text-slate-400">
+          <p className="text-xs font-semibold text-ink-muted">
             Paste the prompt into a new Claude chat. Large courses may take Claude a minute; if the reply gets cut off, ask for fewer lessons.
           </p>
         </div>
@@ -180,7 +180,7 @@ export default function ImportCourse({ onImported }) {
           <button className="btn btn-primary mt-3 w-full" disabled={busy} onClick={importCourse}>
             {busy ? <Spinner /> : 'Import as draft'}
           </button>
-          <p className="mt-2 text-center text-xs font-semibold text-slate-400">You can review and edit everything before publishing.</p>
+          <p className="mt-2 text-center text-xs font-semibold text-ink-muted">You can review and edit everything before publishing.</p>
         </section>
       )}
     </div>
