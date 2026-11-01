@@ -55,7 +55,7 @@ export default function PracticeRound({ onClose, onDone, doneLabel = 'Back to le
       }
     >
       <div className="flex flex-col items-center py-10 text-center">
-        {stage === 'saving' && <Spinner className="size-10 text-grape-500" />}
+        {stage === 'saving' && <Spinner className="size-10 text-neon-400" />}
         {stage === 'error' && <p className="font-bold text-heart-500">Couldn't save your hearts. Check your connection.</p>}
         {stage === 'done' && (
           <>
@@ -66,7 +66,7 @@ export default function PracticeRound({ onClose, onDone, doneLabel = 'Back to le
                 <Heart key={i} className="size-9" fill="currentColor" />
               ))}
             </div>
-            <p className="mt-4 font-semibold text-slate-500">Practice makes progress. Back to it!</p>
+            <p className="mt-4 font-semibold text-slate-400">Practice makes progress. Back to it!</p>
           </>
         )}
       </div>

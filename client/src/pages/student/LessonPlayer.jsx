@@ -38,7 +38,7 @@ function LessonIntro({ lesson, course, onStart, onClose }) {
       <h1 className="mb-6 text-3xl font-black">{lesson.title}</h1>
       {embedUrl && (
         <iframe
-          className="mb-6 aspect-video w-full rounded-3xl bg-slate-100"
+          className="mb-6 aspect-video w-full rounded-3xl bg-white/10"
           src={embedUrl}
           title={lesson.title}
           allow="accelerometer; encrypted-media; picture-in-picture"
@@ -46,12 +46,12 @@ function LessonIntro({ lesson, course, onStart, onClose }) {
         />
       )}
       {lesson.reading.trim() && (
-        <div className="lesson-prose rounded-3xl border-2 border-slate-200 p-5" dangerouslySetInnerHTML={{ __html: renderMarkdown(lesson.reading) }} />
+        <div className="lesson-prose rounded-3xl border-2 border-white/10 p-5" dangerouslySetInnerHTML={{ __html: renderMarkdown(lesson.reading) }} />
       )}
       {!embedUrl && !lesson.reading.trim() && (
         <div className="flex items-center gap-4">
           <Mascot size={90} mood="excited" />
-          <p className="text-lg font-bold text-slate-500">Jump straight in, you'll learn as you go!</p>
+          <p className="text-lg font-bold text-slate-400">Jump straight in, you'll learn as you go!</p>
         </div>
       )}
     </PlayerShell>
@@ -127,11 +127,11 @@ export default function LessonPlayer() {
       <PlayerShell onClose={backToMap}>
         <div className="flex flex-col items-center gap-4 py-20 text-center">
           {stage === 'saving' ? (
-            <Spinner className="size-10 text-grape-500" />
+            <Spinner className="size-10 text-neon-400" />
           ) : (
             <>
               <Mascot size={90} mood="sad" />
-              <p className="font-bold text-slate-500">We couldn't save your progress. Check your connection.</p>
+              <p className="font-bold text-slate-400">We couldn't save your progress. Check your connection.</p>
               <button className="btn btn-primary" onClick={() => complete(stats)}>
                 Try again
               </button>
@@ -160,7 +160,7 @@ export default function LessonPlayer() {
       </div>
 
       {practising && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-white">
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-app">
           <PracticeRound doneLabel="Back to the lesson" onClose={() => setPractising(false)} onDone={() => setPractising(false)} />
         </div>
       )}
@@ -169,7 +169,7 @@ export default function LessonPlayer() {
         <Modal title="Leave this lesson?" onClose={() => setConfirmQuit(false)}>
           <div className="flex flex-col items-center gap-3 text-center">
             <Mascot size={90} mood="sad" />
-            <p className="font-semibold text-slate-500">You'll lose your progress in this lesson.</p>
+            <p className="font-semibold text-slate-400">You'll lose your progress in this lesson.</p>
             <button className="btn btn-primary w-full" onClick={() => setConfirmQuit(false)} autoFocus>
               Keep learning
             </button>
@@ -183,12 +183,12 @@ export default function LessonPlayer() {
       {outOfHearts && (
         <Modal title="Out of hearts!" onClose={() => setOutOfHearts(false)}>
           <div className="flex flex-col items-center gap-3 text-center">
-            <div className="flex gap-1 text-slate-300">
+            <div className="flex gap-1 text-slate-600">
               {Array.from({ length: 5 }, (_, i) => (
                 <Heart key={i} className="size-8" fill="currentColor" />
               ))}
             </div>
-            <p className="font-semibold text-slate-500">
+            <p className="font-semibold text-slate-400">
               Do a quick practice round to refill your hearts. Your code is saved here, so you can pick up where you left off.
             </p>
             <button

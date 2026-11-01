@@ -2,10 +2,10 @@ import { ArrowDown, ArrowDownUp, ArrowUp, Code2, ListChecks, Plus, TextCursorInp
 import { ConfirmButton } from '../ui';
 
 export const EXERCISE_TYPES = {
-  mcq: { label: 'Multiple choice', icon: ListChecks, tint: 'bg-sky-100 text-sky-600' },
-  fill_blank: { label: 'Fill in the blank', icon: TextCursorInput, tint: 'bg-lime-100 text-lime-700' },
-  order_code: { label: 'Arrange the code', icon: ArrowDownUp, tint: 'bg-orange-100 text-orange-600' },
-  code_challenge: { label: 'Code challenge', icon: Code2, tint: 'bg-grape-100 text-grape-600' },
+  mcq: { label: 'Multiple choice', icon: ListChecks, tint: 'bg-sky-400/15 text-sky-300' },
+  fill_blank: { label: 'Fill in the blank', icon: TextCursorInput, tint: 'bg-lime-400/15 text-lime-300' },
+  order_code: { label: 'Arrange the code', icon: ArrowDownUp, tint: 'bg-orange-400/15 text-orange-300' },
+  code_challenge: { label: 'Code challenge', icon: Code2, tint: 'bg-neon-500/20 text-neon-300' },
 };
 
 export function newExercise(type) {
@@ -44,7 +44,7 @@ function McqFields({ exercise, update }) {
               aria-label={`Mark option ${i + 1} correct`}
             />
             <input
-              className={`input py-2.5 ${correctIndex === i ? 'border-lime-400 bg-lime-50' : ''}`}
+              className={`input py-2.5 ${correctIndex === i ? 'border-lime-400 bg-lime-400/10' : ''}`}
               placeholder={`Option ${i + 1}`}
               value={option}
               onChange={(e) => update({ options: replaceAt(options, i, e.target.value) })}
@@ -98,7 +98,7 @@ function FillBlankFields({ exercise, update }) {
           ))}
         </div>
       ) : (
-        <p className="text-sm font-bold text-orange-500">Add at least one ___ blank.</p>
+        <p className="text-sm font-bold text-orange-400">Add at least one ___ blank.</p>
       )}
     </>
   );
@@ -149,20 +149,20 @@ function CodeChallengeFields({ exercise, update }) {
         <span className="label">Checks (all must pass)</span>
         <p className="mb-2 text-xs font-semibold text-slate-400">
           Each check is a JavaScript expression that's true when the task is done, run against the student's page. Example:{' '}
-          <code className="rounded bg-slate-100 px-1">document.querySelector('h1')?.textContent.trim() === 'Hi'</code>
+          <code className="rounded bg-white/10 px-1">document.querySelector('h1')?.textContent.trim() === 'Hi'</code>
         </p>
         <div className="space-y-3">
           {tests.map((test, i) => (
-            <div key={i} className="flex items-start gap-2 rounded-2xl bg-slate-50 p-3">
+            <div key={i} className="flex items-start gap-2 rounded-2xl bg-white/[0.03] p-3">
               <div className="flex-1 space-y-2">
                 <input
-                  className="input bg-white py-2.5"
+                  className="input py-2.5"
                   placeholder="What students see, e.g. Page has a heading"
                   value={test.label}
                   onChange={(e) => update({ tests: replaceAt(tests, i, { ...test, label: e.target.value }) })}
                 />
                 <input
-                  className="input-code bg-white py-2.5"
+                  className="input-code py-2.5"
                   placeholder="document.querySelector('h1') !== null"
                   value={test.check}
                   onChange={(e) => update({ tests: replaceAt(tests, i, { ...test, check: e.target.value }) })}

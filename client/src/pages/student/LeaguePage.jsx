@@ -18,7 +18,7 @@ function TierLadder({ current }) {
           className={`flex items-center justify-center rounded-2xl transition ${
             i === current ? 'size-14 text-3xl shadow-lg' : 'size-9 text-lg sm:size-10'
           } ${i > current ? 'opacity-30 grayscale' : ''}`}
-          style={{ backgroundColor: i <= current ? tier.color : '#E2E8F0' }}
+          style={{ backgroundColor: i <= current ? tier.color : 'rgb(255 255 255 / 0.08)', boxShadow: i === current ? `0 0 30px ${tier.color}` : undefined }}
         >
           {tier.emoji}
         </span>
@@ -30,15 +30,15 @@ function TierLadder({ current }) {
 function ZoneDivider({ zone, nextTier }) {
   const up = zone === 'promote';
   return (
-    <li className={`flex items-center gap-2 px-4 py-2 text-xs font-black tracking-wider uppercase ${up ? 'text-lime-600' : 'text-heart-500'}`}>
+    <li className={`flex items-center gap-2 px-4 py-2 text-xs font-black tracking-wider uppercase ${up ? 'text-lime-400' : 'text-heart-500'}`}>
       {up ? <ArrowUp className="size-4" /> : <ArrowDown className="size-4" />}
       {up ? `Promotion zone${nextTier ? `: ${nextTier.name}` : ''}` : 'Demotion zone'}
-      <span className={`h-0.5 flex-1 rounded ${up ? 'bg-lime-200' : 'bg-red-200'}`} />
+      <span className={`h-0.5 flex-1 rounded ${up ? 'bg-lime-400/25' : 'bg-red-500/25'}`} />
     </li>
   );
 }
 
-const RANK_STYLES = ['bg-yellow-400 text-white', 'bg-slate-300 text-white', 'bg-orange-300 text-white'];
+const RANK_STYLES = ['bg-yellow-400 text-white', 'bg-slate-400 text-white', 'bg-orange-300 text-white'];
 
 export default function LeaguePage() {
   const { setUser } = useAuth();
@@ -69,7 +69,7 @@ export default function LeaguePage() {
 
       {!data.joined ? (
         <EmptyState title="Join this week's league!">
-          <p className="font-semibold text-slate-500">
+          <p className="font-semibold text-slate-400">
             Finish a lesson to get placed in a group of up to 20 learners. The top learners move up to {nextTier ? `${nextTier.name} League` : 'glory'} each
             week!
           </p>
@@ -84,24 +84,24 @@ export default function LeaguePage() {
               {index === firstDemoteIndex && <ZoneDivider zone="demote" />}
               <li
                 className={`flex items-center gap-3 px-4 py-3 ${
-                  member.isMe ? 'bg-grape-50 ring-2 ring-grape-200 ring-inset' : index % 2 ? 'bg-slate-50/60' : ''
+                  member.isMe ? 'bg-neon-500/10 ring-2 ring-neon-400/30 ring-inset' : index % 2 ? 'bg-white/[0.02]' : ''
                 }`}
               >
                 <span
                   className={`flex size-8 shrink-0 items-center justify-center rounded-full text-sm font-black ${
-                    RANK_STYLES[index] ?? (member.zone === 'promote' ? 'text-lime-600' : member.zone === 'demote' ? 'text-heart-500' : 'text-slate-400')
+                    RANK_STYLES[index] ?? (member.zone === 'promote' ? 'text-lime-400' : member.zone === 'demote' ? 'text-heart-500' : 'text-slate-400')
                   }`}
                 >
                   {member.rank}
                 </span>
-                <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-grape-100 font-black text-grape-600">
+                <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-neon-500/20 font-black text-neon-300">
                   {member.name[0]?.toUpperCase()}
                 </span>
-                <span className={`min-w-0 flex-1 truncate font-extrabold ${member.isMe ? 'text-grape-700' : ''}`}>
+                <span className={`min-w-0 flex-1 truncate font-extrabold ${member.isMe ? 'text-neon-200' : ''}`}>
                   {member.name}
                   {member.isMe && ' (you)'}
                 </span>
-                <span className="flex items-center gap-1 font-black text-sky-500">
+                <span className="flex items-center gap-1 font-black text-sky-400">
                   <Zap className="size-4" fill="currentColor" /> {member.xp} XP
                 </span>
               </li>

@@ -9,7 +9,7 @@ import { Spinner } from '../ui';
 function StepHeading({ number, children }) {
   return (
     <h3 className="mb-3 flex items-center gap-2 font-black">
-      <span className="flex size-7 items-center justify-center rounded-full bg-grape-500 text-sm text-white">{number}</span>
+      <span className="flex size-7 items-center justify-center rounded-full bg-neon-500 text-sm text-white">{number}</span>
       {children}
     </h3>
   );
@@ -19,20 +19,20 @@ function Preview({ summary }) {
   const lessons = summary.modules.flatMap((m) => m.lessons);
   const exercises = lessons.flatMap((l) => l.exerciseTypes);
   return (
-    <div className="rounded-2xl border-2 border-lime-300 bg-lime-50 p-4">
-      <p className="font-black text-lime-800">
+    <div className="rounded-2xl border-2 border-lime-400/40 bg-lime-400/10 p-4">
+      <p className="font-black text-lime-300">
         {summary.emoji} {summary.title}
       </p>
-      <p className="mb-3 text-sm font-bold text-lime-700">
+      <p className="mb-3 text-sm font-bold text-lime-300">
         {summary.modules.length} modules · {lessons.length} lessons · {exercises.length} exercises
       </p>
       <ol className="max-h-56 space-y-2 overflow-y-auto pr-1 text-sm">
         {summary.modules.map((mod, i) => (
           <li key={i}>
-            <p className="font-extrabold text-slate-700">
+            <p className="font-extrabold text-slate-200">
               {i + 1}. {mod.title}
             </p>
-            <ul className="ml-5 list-disc font-semibold text-slate-500">
+            <ul className="ml-5 list-disc font-semibold text-slate-400">
               {mod.lessons.map((lesson, j) => (
                 <li key={j}>
                   {lesson.title}{' '}
@@ -110,7 +110,7 @@ export default function ImportCourse({ onImported }) {
             onChange={(e) => set({ topic: e.target.value })}
           />
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-            <label className="text-sm font-bold text-slate-500">
+            <label className="text-sm font-bold text-slate-400">
               Audience
               <select className="input mt-1 py-2" value={request.audience} onChange={(e) => set({ audience: e.target.value })}>
                 <option>Complete beginners</option>
@@ -118,11 +118,11 @@ export default function ImportCourse({ onImported }) {
                 <option>Intermediate learners</option>
               </select>
             </label>
-            <label className="text-sm font-bold text-slate-500">
+            <label className="text-sm font-bold text-slate-400">
               Modules
               <input type="number" min={1} max={10} className="input mt-1 py-2" value={request.moduleCount} onChange={(e) => set({ moduleCount: Number(e.target.value) })} />
             </label>
-            <label className="text-sm font-bold text-slate-500">
+            <label className="text-sm font-bold text-slate-400">
               Lessons per module
               <input type="number" min={1} max={10} className="input mt-1 py-2" value={request.lessonsPerModule} onChange={(e) => set({ lessonsPerModule: Number(e.target.value) })} />
             </label>
@@ -161,7 +161,7 @@ export default function ImportCourse({ onImported }) {
       </section>
 
       {issues.length > 0 && (
-        <div className="rounded-2xl border-2 border-red-200 bg-red-50 p-4 text-sm font-bold text-heart-500">
+        <div className="rounded-2xl border-2 border-red-500/30 bg-red-500/10 p-4 text-sm font-bold text-heart-500">
           <p className="mb-1 flex items-center gap-2">
             <CircleAlert className="size-4" /> Some things need fixing. Tell Claude about them and paste the new reply:
           </p>

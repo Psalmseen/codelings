@@ -5,16 +5,16 @@ import CohortBoard from '../../components/CohortBoard';
 import Mascot from '../../components/Mascot';
 import { ErrorState, PageLoader, ProgressBar } from '../../components/ui';
 import { useFetch } from '../../hooks/useFetch';
-import { darken, formatDate, percent, timeUntil } from '../../lib/format';
+import { courseGlow, darken, formatDate, percent, timeUntil } from '../../lib/format';
 
 // Horizontal offsets (px) that make the lesson path wind left and right
 const PATH_OFFSETS = [0, 44, 70, 44, 0, -44, -70, -44];
 
 function LessonNode({ lesson, index, color, selected, onSelect }) {
   const styles = {
-    completed: { backgroundColor: '#FBBF24', boxShadow: `0 6px 0 ${darken('#FBBF24')}` },
-    available: { backgroundColor: color, boxShadow: `0 6px 0 ${darken(color)}` },
-    locked: { backgroundColor: '#E2E8F0', boxShadow: '0 6px 0 #CBD5E1' },
+    completed: { backgroundColor: '#FBBF24', boxShadow: `0 6px 0 ${darken('#FBBF24')}, 0 0 24px #FBBF2466` },
+    available: { backgroundColor: color, boxShadow: `0 6px 0 ${darken(color)}, 0 0 32px ${color}aa` },
+    locked: { backgroundColor: 'rgb(255 255 255 / 0.08)', boxShadow: '0 6px 0 rgb(255 255 255 / 0.04)', border: '1px solid rgb(255 255 255 / 0.1)' },
   };
   const Icon = { completed: Check, available: Star, locked: Lock }[lesson.state];
 
@@ -22,7 +22,7 @@ function LessonNode({ lesson, index, color, selected, onSelect }) {
     <div className="relative flex flex-col items-center" style={{ transform: `translateX(${PATH_OFFSETS[index % PATH_OFFSETS.length]}px)` }}>
       {lesson.state === 'available' && !selected && (
         <span
-          className="absolute -top-10 animate-float rounded-xl border-2 border-slate-200 bg-white px-3 py-1 text-xs font-black tracking-wide uppercase"
+          className="absolute -top-10 animate-float rounded-xl glass-strong px-3 py-1 text-xs font-black tracking-wide uppercase"
           style={{ color }}
         >
           Start
@@ -35,7 +35,7 @@ function LessonNode({ lesson, index, color, selected, onSelect }) {
         style={styles[lesson.state]}
       >
         <Icon
-          className={`size-8 ${lesson.state === 'locked' ? 'text-slate-400' : 'text-white'}`}
+          className={`size-8 ${lesson.state === 'locked' ? 'text-slate-500' : 'text-white'}`}
           fill={lesson.state === 'available' ? 'currentColor' : 'none'}
           strokeWidth={3}
         />
@@ -47,7 +47,7 @@ function LessonNode({ lesson, index, color, selected, onSelect }) {
 function LessonPopover({ lesson, color, waiting }) {
   const navigate = useNavigate();
   return (
-    <div className="mt-4 w-72 rounded-3xl p-4 text-white" style={{ backgroundColor: lesson.state === 'locked' ? '#94A3B8' : color }}>
+    <div className="mt-4 w-72 rounded-3xl p-4 text-white" style={lesson.state === 'locked' ? { backgroundColor: 'rgb(148 163 184 / 0.18)', border: '1px solid rgb(255 255 255 / 0.12)' } : { backgroundColor: color, boxShadow: `0 0 32px ${color}66` }}>
       <h3 className="text-lg font-black">{lesson.title}</h3>
       {lesson.state === 'locked' ? (
         <p className="font-semibold text-white/90">
@@ -80,7 +80,7 @@ export default function CourseMap() {
 
   return (
     <div className="pb-16">
-      <div className="mb-8 rounded-3xl p-5 text-white" style={{ backgroundColor: course.color, boxShadow: `0 6px 0 ${darken(course.color)}` }}>
+      <div className="mb-8 rounded-3xl p-5 text-white" style={courseGlow(course.color, 6)}>
         <Link to="/learn" className="mb-3 inline-flex items-center gap-1 text-sm font-extrabold text-white/80 uppercase hover:text-white">
           <ArrowLeft className="size-4" /> All courses
         </Link>
@@ -101,9 +101,9 @@ export default function CourseMap() {
           <Mascot size={72} className="shrink-0 animate-float" />
           <div>
             <p className="flex items-center gap-2 text-lg font-black">
-              <CalendarClock className="size-5 text-grape-500" /> Starts in {timeUntil(cohort.startDate)}
+              <CalendarClock className="size-5 text-neon-400" /> Starts in {timeUntil(cohort.startDate)}
             </p>
-            <p className="font-semibold text-slate-500">
+            <p className="font-semibold text-slate-400">
               {cohort.name} kicks off on {formatDate(cohort.startDate)}. Lessons unlock then. Get ready!
             </p>
           </div>
@@ -113,7 +113,7 @@ export default function CourseMap() {
 
       {modules.map((mod, moduleIndex) => (
         <section key={mod._id} className="mb-10">
-          <div className="mb-10 rounded-2xl border-2 border-slate-200 bg-white px-4 py-3">
+          <div className="glass mb-10 rounded-2xl px-4 py-3">
             <p className="text-xs font-black tracking-wider text-slate-400 uppercase">Module {moduleIndex + 1}</p>
             <h2 className="text-lg font-black">{mod.title}</h2>
           </div>

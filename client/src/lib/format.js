@@ -59,3 +59,9 @@ export const formatDate = (date) =>
 /** Today's date (YYYY-MM-DD) in a timezone, matching how the server stores streak days. */
 export const todayIn = (timezone) =>
   new Intl.DateTimeFormat('en-CA', { timeZone: timezone, year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
+
+/** Glowing gradient style for blocks in a course's own colour (`depth` = height of the 3D edge). */
+export const courseGlow = (color, depth = 4) => ({
+  background: `linear-gradient(135deg, ${color}, ${darken(color, 0.3)})`,
+  boxShadow: `0 ${depth}px 0 ${darken(color, 0.45)}, 0 0 ${depth * 8}px ${color}55`,
+});

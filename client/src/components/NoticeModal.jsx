@@ -36,7 +36,7 @@ export default function NoticeModal() {
   const info = notice && describe(notice);
 
   useEffect(() => {
-    if (info?.celebrate) confetti({ particleCount: 150, spread: 90, origin: { y: 0.4 } });
+    if (info?.celebrate) confetti({ particleCount: 150, spread: 90, origin: { y: 0.4 }, colors: ['#2F6BFF', '#FF2BD6', '#5CF2FF', '#FFFFFF'] });
   }, [notice?._id, info?.celebrate]);
 
   if (!info) return null;
@@ -59,7 +59,7 @@ export default function NoticeModal() {
           <span className="absolute -right-3 -bottom-1 text-5xl">{info.icon}</span>
         </div>
         <h2 className="text-2xl font-black">{info.title}</h2>
-        <p className="font-semibold text-slate-500">{info.body}</p>
+        <p className="font-semibold text-slate-400">{info.body}</p>
         <button className="btn btn-primary mt-2 w-full" onClick={dismiss} disabled={busy} autoFocus>
           {busy ? <Spinner /> : 'Got it'}
         </button>

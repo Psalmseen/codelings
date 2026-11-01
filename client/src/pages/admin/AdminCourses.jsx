@@ -5,13 +5,13 @@ import ImportCourse from '../../components/admin/ImportCourse';
 import { EmptyState, ErrorState, Modal, PageHeader, PageLoader } from '../../components/ui';
 import { useFetch } from '../../hooks/useFetch';
 import { api } from '../../lib/api';
-import { darken } from '../../lib/format';
+import { courseGlow } from '../../lib/format';
 
 export function StatusBadge({ status }) {
   return status === 'published' ? (
-    <span className="badge bg-lime-100 text-lime-700">Live</span>
+    <span className="badge bg-lime-400/15 text-lime-300">Live</span>
   ) : (
-    <span className="badge bg-slate-100 text-slate-500">Draft</span>
+    <span className="badge bg-white/10 text-slate-400">Draft</span>
   );
 }
 
@@ -50,11 +50,11 @@ export default function AdminCourses() {
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {data?.courses.map((course) => (
-          <Link key={course._id} to={`/admin/courses/${course._id}`} className="card transition hover:-translate-y-0.5 hover:border-slate-300">
+          <Link key={course._id} to={`/admin/courses/${course._id}`} className="card transition hover:-translate-y-0.5 hover:border-white/25">
             <div className="mb-3 flex items-start justify-between">
               <span
                 className="flex size-14 items-center justify-center rounded-2xl text-3xl"
-                style={{ backgroundColor: course.color, boxShadow: `0 4px 0 ${darken(course.color)}` }}
+                style={courseGlow(course.color)}
               >
                 {course.emoji}
               </span>

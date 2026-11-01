@@ -15,7 +15,7 @@ export default function AdminLayout() {
 
   return (
     <div className="min-h-dvh lg:flex">
-      <aside className="border-b-2 border-slate-200 bg-white lg:sticky lg:top-0 lg:flex lg:h-dvh lg:w-64 lg:shrink-0 lg:flex-col lg:border-r-2 lg:border-b-0">
+      <aside className="border-b border-white/10 glass-strong lg:sticky lg:top-0 lg:flex lg:h-dvh lg:w-64 lg:shrink-0 lg:flex-col lg:border-r-2 lg:border-b-0">
         <div className="flex items-center justify-between px-4 py-4 lg:px-5">
           <Logo admin />
           <button className="icon-btn lg:hidden" onClick={logout} aria-label="Sign out">
@@ -30,7 +30,7 @@ export default function AdminLayout() {
               end={end}
               className={({ isActive }) =>
                 `flex shrink-0 items-center gap-3 rounded-2xl px-4 py-3 font-extrabold transition ${
-                  isActive ? 'bg-grape-100 text-grape-600 ring-2 ring-grape-200' : 'text-slate-500 hover:bg-slate-100'
+                  isActive ? 'bg-neon-500/20 text-neon-300 ring-2 ring-neon-400/30' : 'text-slate-400 hover:bg-white/10'
                 }`
               }
             >
@@ -39,7 +39,7 @@ export default function AdminLayout() {
             </NavLink>
           ))}
         </nav>
-        <div className="hidden border-t-2 border-slate-100 p-4 lg:block">
+        <div className="hidden border-t-2 border-white/5 p-4 lg:block">
           <p className="truncate font-extrabold">{user.name}</p>
           <p className="mb-3 truncate text-sm font-semibold text-slate-400">{user.email}</p>
           <button className="btn btn-secondary btn-sm w-full" onClick={logout}>

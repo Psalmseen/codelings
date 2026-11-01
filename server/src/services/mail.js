@@ -65,13 +65,13 @@ const escapeHtml = (value) =>
 
 function layout({ heading, body, buttonText, buttonUrl, footer = '' }) {
   return `<!doctype html>
-<html><body style="margin:0;background:#F6F4FF;font-family:Nunito,Segoe UI,Arial,sans-serif;color:#1E1B4B">
+<html><body style="margin:0;background:#EEF3FF;font-family:Nunito,Segoe UI,Arial,sans-serif;color:#1E1B4B">
   <table width="100%" cellpadding="0" cellspacing="0" style="padding:32px 16px"><tr><td align="center">
-    <table width="100%" cellpadding="0" cellspacing="0" style="max-width:480px;background:#fff;border-radius:24px;border:2px solid #ECE8FF;padding:32px">
-      <tr><td style="font-size:22px;font-weight:900;color:#6D4AFF;padding-bottom:16px">codelings</td></tr>
+    <table width="100%" cellpadding="0" cellspacing="0" style="max-width:480px;background:#fff;border-radius:24px;border:2px solid #DCE6FF;padding:32px">
+      <tr><td style="font-size:22px;font-weight:900;color:#2F6BFF;padding-bottom:16px">codelings</td></tr>
       <tr><td style="font-size:24px;font-weight:900;padding-bottom:12px">${heading}</td></tr>
       <tr><td style="font-size:16px;line-height:1.6;color:#475569;padding-bottom:24px">${body}</td></tr>
-      <tr><td><a href="${buttonUrl}" style="display:inline-block;background:#6D4AFF;color:#fff;text-decoration:none;font-weight:900;text-transform:uppercase;letter-spacing:.05em;padding:14px 28px;border-radius:16px;border-bottom:4px solid #4626D6">${buttonText}</a></td></tr>
+      <tr><td><a href="${buttonUrl}" style="display:inline-block;background:#2F6BFF;color:#fff;text-decoration:none;font-weight:900;text-transform:uppercase;letter-spacing:.05em;padding:14px 28px;border-radius:16px;border-bottom:4px solid #1A43C4">${buttonText}</a></td></tr>
       ${footer && `<tr><td style="font-size:13px;color:#94A3B8;padding-top:24px">${footer}</td></tr>`}
     </table>
   </td></tr></table>

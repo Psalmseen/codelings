@@ -21,8 +21,8 @@ export default function CohortsCard({ cohorts, mutate }) {
 
   return (
     <section className="card mb-6 p-0">
-      <header className="flex items-center gap-3 border-b-2 border-slate-100 px-5 py-4">
-        <Users className="size-6 text-grape-500" />
+      <header className="flex items-center gap-3 border-b-2 border-white/5 px-5 py-4">
+        <Users className="size-6 text-neon-400" />
         <div>
           <h2 className="text-lg font-black">Cohorts</h2>
           <p className="text-sm font-bold text-slate-400">Students in a cohort start on the same day and share a private leaderboard.</p>
@@ -30,7 +30,7 @@ export default function CohortsCard({ cohorts, mutate }) {
       </header>
 
       {cohorts.length > 0 && (
-        <ul className="divide-y-2 divide-slate-100">
+        <ul className="divide-y-2 divide-white/5">
           {cohorts.map((cohort) => {
             const started = new Date(cohort.startDate) <= new Date();
             return (
@@ -41,7 +41,7 @@ export default function CohortsCard({ cohorts, mutate }) {
                     {started ? 'Started' : 'Starts'} {formatDate(cohort.startDate)} · {cohort.studentCount} student{cohort.studentCount === 1 ? '' : 's'}
                   </p>
                 </div>
-                <span className={`badge ${started ? 'bg-lime-100 text-lime-700' : 'bg-orange-100 text-orange-600'}`}>{started ? 'Running' : 'Upcoming'}</span>
+                <span className={`badge ${started ? 'bg-lime-400/15 text-lime-300' : 'bg-orange-400/15 text-orange-300'}`}>{started ? 'Running' : 'Upcoming'}</span>
                 <ConfirmButton title="Delete cohort (students stay enrolled)" confirmLabel="Delete?" onConfirm={() => mutate(`/cohorts/${cohort._id}`, 'DELETE', undefined, 'Cohort deleted')}>
                   <Trash2 className="size-5" />
                 </ConfirmButton>

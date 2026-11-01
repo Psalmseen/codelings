@@ -106,7 +106,7 @@ export default function AdminStudents() {
       {students.error && <ErrorState error={students.error} onRetry={students.reload} />}
       {students.data?.students.length === 0 && (
         <EmptyState title="No students yet">
-          <p className="font-semibold text-slate-500">Send an invite link to get your first learner in.</p>
+          <p className="font-semibold text-slate-400">Send an invite link to get your first learner in.</p>
           <Link to="/admin/invites" className="btn btn-primary">
             Create an invite
           </Link>
@@ -119,7 +119,7 @@ export default function AdminStudents() {
           return (
             <div key={student._id} className="card">
               <div className="mb-4 flex flex-wrap items-center gap-4">
-                <span className="flex size-12 items-center justify-center rounded-full bg-grape-100 text-lg font-black text-grape-600">
+                <span className="flex size-12 items-center justify-center rounded-full bg-neon-500/20 text-lg font-black text-neon-300">
                   {student.name[0]?.toUpperCase()}
                 </span>
                 <div className="min-w-0 flex-1">
@@ -135,31 +135,31 @@ export default function AdminStudents() {
                   <span className="flex items-center gap-1 text-flame-500" title="Current streak">
                     <Flame className="size-5" fill="currentColor" /> {student.streak.current}
                   </span>
-                  <span className="flex items-center gap-1 text-sky-500" title={`Level ${student.levelInfo.level}`}>
+                  <span className="flex items-center gap-1 text-sky-400" title={`Level ${student.levelInfo.level}`}>
                     <Zap className="size-5" fill="currentColor" /> {student.xp}
                   </span>
                 </div>
               </div>
 
               <div className="mb-3 space-y-2">
-                {student.enrollments.length === 0 && <p className="text-sm font-bold text-orange-500">Not enrolled in any course</p>}
+                {student.enrollments.length === 0 && <p className="text-sm font-bold text-orange-400">Not enrolled in any course</p>}
                 {student.enrollments.map((enrollment) => {
                   const cohorts = cohortsByCourse.get(enrollment.courseId) ?? [];
                   return (
-                    <div key={enrollment.courseId} className="flex flex-wrap items-center gap-3 rounded-2xl bg-slate-50 px-3 py-2">
-                      <span className="min-w-0 flex-1 truncate font-extrabold text-slate-600">
+                    <div key={enrollment.courseId} className="flex flex-wrap items-center gap-3 rounded-2xl bg-white/[0.03] px-3 py-2">
+                      <span className="min-w-0 flex-1 truncate font-extrabold text-slate-300">
                         {enrollment.emoji} {enrollment.title}
                       </span>
                       <span className="text-sm font-black text-slate-400">{percent(enrollment.completed, enrollment.total)}%</span>
                       {cohorts.length > 0 ? (
                         <CohortSelect
-                          className="w-auto bg-white"
+                          className="w-auto"
                           cohorts={cohorts}
                           value={enrollment.cohort?._id}
                           onChange={(cohortId) => changeCohort(student, enrollment, cohortId)}
                         />
                       ) : (
-                        enrollment.pacing === 'cohort' && <span className="text-xs font-bold text-orange-500">No cohorts yet</span>
+                        enrollment.pacing === 'cohort' && <span className="text-xs font-bold text-orange-400">No cohorts yet</span>
                       )}
                       <button
                         className="icon-btn size-8"

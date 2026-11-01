@@ -4,7 +4,7 @@ import Mascot from '../../components/Mascot';
 import { EmptyState, ErrorState, PageLoader, ProgressBar } from '../../components/ui';
 import { useAuth } from '../../context/AuthContext';
 import { useFetch } from '../../hooks/useFetch';
-import { darken, firstName, percent, timeUntil, todayIn } from '../../lib/format';
+import { courseGlow, firstName, percent, timeUntil, todayIn } from '../../lib/format';
 
 const MAX_HEARTS = 5;
 
@@ -26,7 +26,7 @@ function ContinueCard({ course, atRisk, streak }) {
     <Link
       to={`/learn/lessons/${course.nextLesson._id}`}
       className="block overflow-hidden rounded-3xl text-white transition hover:-translate-y-0.5"
-      style={{ backgroundColor: course.color, boxShadow: `0 6px 0 ${darken(course.color)}` }}
+      style={courseGlow(course.color, 6)}
     >
       {atRisk && (
         <p className="flex items-center gap-2 bg-black/20 px-5 py-2 text-sm font-black">
@@ -59,10 +59,10 @@ export default function LearnHome() {
     <div className="space-y-6">
       <section className="flex items-center gap-4">
         <Mascot size={84} mood={status.atRisk ? 'happy' : 'excited'} className="shrink-0 animate-float" />
-        <div className="relative flex-1 rounded-3xl border-2 border-slate-200 bg-white p-4">
-          <span className="absolute top-1/2 -left-2 size-4 -translate-y-1/2 rotate-45 border-b-2 border-l-2 border-slate-200 bg-white" />
+        <div className="relative flex-1 rounded-3xl border border-white/10 bg-night-800 p-4 shadow-[0_0_30px_rgb(47_107_255/0.15)]">
+          <span className="absolute top-1/2 -left-2 size-4 -translate-y-1/2 rotate-45 border-b border-l border-white/10 bg-night-800" />
           <p className="text-lg font-black">Hi {firstName(user.name)}! 👋</p>
-          <p className={`font-semibold ${status.atRisk ? 'text-flame-500' : 'text-slate-500'}`}>{greeting(status)}</p>
+          <p className={`font-semibold ${status.atRisk ? 'text-flame-500' : 'text-slate-400'}`}>{greeting(status)}</p>
         </div>
       </section>
 
@@ -78,7 +78,7 @@ export default function LearnHome() {
         <ProgressBar value={percent(level.xpIntoLevel, level.xpForNext)} color="var(--color-sky-400)" />
       </section>
 
-      <Link to="/learn/practice" className="card flex items-center gap-4 transition hover:-translate-y-0.5 hover:border-slate-300">
+      <Link to="/learn/practice" className="card flex items-center gap-4 transition hover:-translate-y-0.5 hover:border-white/25">
         <span className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-heart-500 text-white shadow-[0_4px_0_#c9304d]">
           <Heart className="size-6" fill="currentColor" />
         </span>
@@ -96,7 +96,7 @@ export default function LearnHome() {
         {error && <ErrorState error={error} onRetry={reload} />}
         {data?.courses.length === 0 && (
           <EmptyState title="No courses yet">
-            <p className="font-semibold text-slate-500">Your tutor will add you to a course soon. Check back shortly!</p>
+            <p className="font-semibold text-slate-400">Your tutor will add you to a course soon. Check back shortly!</p>
           </EmptyState>
         )}
         <div className="space-y-4">
@@ -107,11 +107,11 @@ export default function LearnHome() {
               <Link
                 key={course._id}
                 to={`/learn/courses/${course._id}`}
-                className="card flex items-center gap-4 transition hover:-translate-y-0.5 hover:border-slate-300"
+                className="card flex items-center gap-4 transition hover:-translate-y-0.5 hover:border-white/25"
               >
                 <span
                   className="flex size-16 shrink-0 items-center justify-center rounded-2xl text-3xl"
-                  style={{ backgroundColor: course.color, boxShadow: `0 4px 0 ${darken(course.color)}` }}
+                  style={courseGlow(course.color)}
                 >
                   {course.emoji}
                 </span>
@@ -123,7 +123,7 @@ export default function LearnHome() {
                   <ProgressBar value={progress} color={course.color} className="h-3" />
                 </div>
                 {course.cohort && !course.cohort.started ? (
-                  <span className="badge shrink-0 bg-grape-100 py-1 text-grape-600">Starts in {timeUntil(course.cohort.startDate)}</span>
+                  <span className="badge shrink-0 bg-neon-500/20 py-1 text-neon-300">Starts in {timeUntil(course.cohort.startDate)}</span>
                 ) : (
                   <span className="btn btn-primary btn-sm hidden sm:inline-flex">
                     {finished ? 'Review' : course.completed ? 'Continue' : 'Start'}

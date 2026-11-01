@@ -83,13 +83,13 @@ export default function CodeChallenge({ exercise, value, onChange, locked, ref }
 
   return (
     <div className="grid gap-4 lg:grid-cols-2">
-      <div className="flex flex-col overflow-hidden rounded-3xl border-2 border-slate-200">
-        <div className="flex border-b-2 border-slate-200 bg-slate-50">
+      <div className="flex flex-col overflow-hidden rounded-3xl border-2 border-white/10">
+        <div className="flex border-b-2 border-white/10 bg-white/[0.03]">
           {TABS.map((t) => (
             <button
               key={t.key}
               onClick={() => setTab(t.key)}
-              className={`cursor-pointer px-4 py-2.5 text-sm font-black transition ${tab === t.key ? 'bg-white text-grape-600' : 'text-slate-400 hover:text-slate-600'}`}
+              className={`cursor-pointer px-4 py-2.5 text-sm font-black transition ${tab === t.key ? 'bg-white/10 text-neon-300' : 'text-slate-400 hover:text-slate-200'}`}
             >
               {t.label}
             </button>
@@ -100,6 +100,7 @@ export default function CodeChallenge({ exercise, value, onChange, locked, ref }
           height="100%"
           extensions={[current.extension]}
           editable={!locked}
+          theme="dark"
           basicSetup={{ foldGutter: false, highlightActiveLine: !locked }}
           onChange={(text) => onChange({ ...value, [tab]: text })}
           className="min-h-[280px] flex-1 text-sm"
@@ -107,13 +108,13 @@ export default function CodeChallenge({ exercise, value, onChange, locked, ref }
       </div>
 
       <div className="flex flex-col gap-4">
-        <div className="overflow-hidden rounded-3xl border-2 border-slate-200">
-          <div className="border-b-2 border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-black text-slate-400">Preview</div>
+        <div className="overflow-hidden rounded-3xl border-2 border-white/10">
+          <div className="border-b-2 border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm font-black text-slate-400">Preview</div>
           <iframe ref={iframeRef} title="Your page" sandbox="allow-scripts" srcDoc={doc} className="h-56 w-full bg-white" />
         </div>
 
-        <div className="rounded-3xl border-2 border-slate-200 p-4">
-          <p className="mb-2 flex items-center gap-2 text-sm font-black text-slate-500">
+        <div className="rounded-3xl border-2 border-white/10 p-4">
+          <p className="mb-2 flex items-center gap-2 text-sm font-black text-slate-400">
             <Target className="size-4" /> Goals
           </p>
           <ul className="space-y-1.5">
@@ -122,19 +123,19 @@ export default function CodeChallenge({ exercise, value, onChange, locked, ref }
               return (
                 <li key={i} className="flex items-start gap-2 font-bold">
                   {result?.passed ? (
-                    <CircleCheck className="mt-0.5 size-5 shrink-0 text-lime-500" />
+                    <CircleCheck className="mt-0.5 size-5 shrink-0 text-lime-400" />
                   ) : result ? (
                     <CircleX className="mt-0.5 size-5 shrink-0 text-heart-500" />
                   ) : (
-                    <span className="mt-1 size-4 shrink-0 rounded-full border-2 border-slate-300" />
+                    <span className="mt-1 size-4 shrink-0 rounded-full border-2 border-white/20" />
                   )}
-                  <span className={result && !result.passed ? 'text-heart-500' : 'text-slate-700'}>{test.label}</span>
+                  <span className={result && !result.passed ? 'text-heart-500' : 'text-slate-200'}>{test.label}</span>
                 </li>
               );
             })}
           </ul>
           {runtimeErrors.length > 0 && (
-            <pre className="mt-3 overflow-x-auto rounded-xl bg-red-50 p-3 font-mono text-xs text-heart-500">{runtimeErrors.join('\n')}</pre>
+            <pre className="mt-3 overflow-x-auto rounded-xl bg-red-500/10 p-3 font-mono text-xs text-heart-500">{runtimeErrors.join('\n')}</pre>
           )}
         </div>
       </div>

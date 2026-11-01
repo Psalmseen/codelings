@@ -7,9 +7,9 @@ import { api } from '../../lib/api';
 import { timeAgo } from '../../lib/format';
 
 const STATUS_STYLES = {
-  pending: 'bg-orange-100 text-orange-600',
-  used: 'bg-lime-100 text-lime-700',
-  expired: 'bg-slate-100 text-slate-500',
+  pending: 'bg-orange-400/15 text-orange-300',
+  used: 'bg-lime-400/15 text-lime-300',
+  expired: 'bg-white/10 text-slate-400',
 };
 
 const whatsappLink = (invite) =>
@@ -94,7 +94,7 @@ function InviteForm({ courses, onCreated }) {
                   key={course._id}
                   onClick={() => toggleCourse(course._id)}
                   className={`cursor-pointer rounded-2xl border-2 px-3 py-2 text-sm font-extrabold transition ${
-                    selected ? 'border-grape-400 bg-grape-50 text-grape-700' : 'border-slate-200 text-slate-500 hover:bg-slate-50'
+                    selected ? 'border-neon-400 bg-neon-500/10 text-neon-200' : 'border-white/10 text-slate-400 hover:bg-white/5'
                   }`}
                 >
                   {course.emoji} {course.title}
@@ -130,7 +130,7 @@ function InviteForm({ courses, onCreated }) {
         ))}
 
       <div className="flex flex-wrap items-center gap-4">
-        <label className="flex items-center gap-2 font-bold text-slate-600">
+        <label className="flex items-center gap-2 font-bold text-slate-300">
           Expires in
           <select className="input w-auto py-2" value={form.expiresInDays} onChange={(e) => setForm({ ...form, expiresInDays: Number(e.target.value) })}>
             {[3, 7, 14, 30, 90].map((d) => (
@@ -140,10 +140,10 @@ function InviteForm({ courses, onCreated }) {
             ))}
           </select>
         </label>
-        <label className={`flex items-center gap-2 font-bold ${form.email ? 'text-slate-600' : 'text-slate-300'}`}>
+        <label className={`flex items-center gap-2 font-bold ${form.email ? 'text-slate-300' : 'text-slate-600'}`}>
           <input
             type="checkbox"
-            className="size-5 accent-grape-500"
+            className="size-5 accent-neon-500"
             disabled={!form.email}
             checked={form.sendEmail && Boolean(form.email)}
             onChange={(e) => setForm({ ...form, sendEmail: e.target.checked })}
@@ -190,9 +190,9 @@ export default function AdminInvites() {
       {courses.data ? <InviteForm courses={courses.data.courses} onCreated={handleCreated} /> : <PageLoader />}
 
       {created && (
-        <div className="card mt-4 border-lime-300 bg-lime-50">
-          <p className="mb-2 font-black text-lime-800">Invite ready! 🎉</p>
-          <p className="mb-3 truncate rounded-xl bg-white px-3 py-2 font-mono text-sm">{created.invite.link}</p>
+        <div className="card mt-4 border-lime-400/40 bg-lime-400/10">
+          <p className="mb-2 font-black text-lime-300">Invite ready! 🎉</p>
+          <p className="mb-3 truncate rounded-xl bg-black/30 px-3 py-2 font-mono text-sm">{created.invite.link}</p>
           <ShareButtons invite={created.invite} />
         </div>
       )}

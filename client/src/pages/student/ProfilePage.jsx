@@ -54,7 +54,7 @@ export default function ProfilePage() {
   return (
     <div className="space-y-6">
       <section className="card flex items-center gap-4">
-        <span className="flex size-20 shrink-0 items-center justify-center rounded-full bg-grape-500 text-4xl font-black text-white shadow-[0_5px_0_var(--color-grape-700)]">
+        <span className="flex size-20 shrink-0 items-center justify-center rounded-full bg-neon-500 text-4xl font-black text-white shadow-[0_5px_0_var(--color-neon-700)]">
           {user.name[0]?.toUpperCase()}
         </span>
         <div className="min-w-0">
@@ -92,7 +92,7 @@ export default function ProfilePage() {
               <div key={badge.key} className={`card flex flex-col items-center p-4 text-center ${badge.earned ? '' : 'opacity-50'}`}>
                 <span
                   className="mb-2 flex size-14 items-center justify-center rounded-2xl"
-                  style={badge.earned ? { backgroundColor: color, boxShadow: `0 4px 0 ${color}99` } : { backgroundColor: '#E2E8F0' }}
+                  style={badge.earned ? { backgroundColor: color, boxShadow: `0 4px 0 ${color}99, 0 0 24px ${color}88` } : { backgroundColor: 'rgb(255 255 255 / 0.08)' }}
                 >
                   {badge.earned ? <Icon className="size-7 text-white" /> : <Lock className="size-6 text-slate-400" />}
                 </span>
@@ -113,7 +113,7 @@ export default function ProfilePage() {
           </span>
           <input
             type="checkbox"
-            className="size-6 accent-grape-500"
+            className="size-6 accent-neon-500"
             checked={user.emailReminders}
             disabled={savingReminders}
             onChange={toggleReminders}

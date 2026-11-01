@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 
 const OPTION_STYLES = {
-  idle: 'border-slate-200 shadow-[0_4px_0_var(--color-slate-200)] hover:bg-slate-50',
-  selected: 'border-sky-400 bg-sky-50 text-sky-700 shadow-[0_4px_0_var(--color-sky-400)]',
-  correct: 'border-lime-500 bg-lime-50 text-lime-700 shadow-[0_4px_0_var(--color-lime-500)]',
-  wrong: 'border-heart-500 bg-red-50 text-heart-500 shadow-[0_4px_0_var(--color-heart-500)]',
+  idle: 'border-white/10 shadow-[0_4px_0_rgb(255_255_255/0.1)] hover:bg-white/5',
+  selected: 'border-sky-400 bg-sky-400/10 text-sky-300 shadow-[0_4px_0_var(--color-sky-400)]',
+  correct: 'border-lime-500 bg-lime-400/10 text-lime-300 shadow-[0_4px_0_var(--color-lime-500)]',
+  wrong: 'border-heart-500 bg-red-500/10 text-heart-500 shadow-[0_4px_0_var(--color-heart-500)]',
 };
 
 export function McqExercise({ exercise, value, onChange, feedback, paused }) {
@@ -47,7 +47,7 @@ export function FillBlankExercise({ exercise, value, onChange, feedback }) {
   const locked = feedback !== null;
 
   return (
-    <div className="rounded-3xl border-2 border-slate-200 bg-slate-50 p-5 font-mono text-lg leading-[2.6] whitespace-pre-wrap">
+    <div className="rounded-3xl border-2 border-white/10 bg-white/[0.03] p-5 font-mono text-lg leading-[2.6] whitespace-pre-wrap">
       {parts.map((part, i) => (
         <span key={i}>
           {part}
@@ -62,8 +62,8 @@ export function FillBlankExercise({ exercise, value, onChange, feedback }) {
               value={value[i]}
               onChange={(e) => onChange(value.map((v, j) => (j === i ? e.target.value : v)))}
               style={{ width: `${Math.max(4, value[i].length + 1)}ch` }}
-              className={`mx-0.5 rounded-lg border-b-4 bg-white px-1.5 py-0 text-center leading-normal font-bold outline-none ${
-                feedback === 'correct' ? 'border-lime-500 text-lime-700' : feedback === 'wrong' ? 'border-heart-500 text-heart-500' : 'border-sky-400 focus:border-grape-500'
+              className={`mx-0.5 rounded-lg border-b-4 bg-white/10 px-1.5 py-0 text-center leading-normal font-bold outline-none ${
+                feedback === 'correct' ? 'border-lime-500 text-lime-300' : feedback === 'wrong' ? 'border-heart-500 text-heart-500' : 'border-sky-400 focus:border-neon-400'
               }`}
             />
           )}
@@ -78,7 +78,7 @@ function CodeTile({ line, onClick, disabled }) {
     <button
       disabled={disabled}
       onClick={onClick}
-      className="cursor-pointer rounded-xl border-2 border-slate-200 bg-white px-3 py-2 text-left font-mono text-sm font-semibold whitespace-pre shadow-[0_3px_0_var(--color-slate-200)] transition active:translate-y-0.5 active:shadow-none disabled:cursor-default"
+      className="cursor-pointer rounded-xl border-2 border-white/10 bg-white/5 px-3 py-2 text-left font-mono text-sm font-semibold whitespace-pre shadow-[0_3px_0_rgb(255_255_255/0.1)] transition active:translate-y-0.5 active:shadow-none disabled:cursor-default"
     >
       {line}
     </button>
@@ -93,7 +93,7 @@ export function OrderCodeExercise({ exercise, value, onChange, feedback }) {
     <div className="space-y-6">
       <div
         className={`min-h-40 space-y-2 rounded-3xl border-2 border-dashed p-4 ${
-          feedback === 'correct' ? 'border-lime-500 bg-lime-50' : feedback === 'wrong' ? 'border-heart-500 bg-red-50' : 'border-slate-300'
+          feedback === 'correct' ? 'border-lime-500 bg-lime-400/10' : feedback === 'wrong' ? 'border-heart-500 bg-red-500/10' : 'border-white/20'
         }`}
       >
         {value.picked.length === 0 && <p className="py-10 text-center font-bold text-slate-400">Tap the lines below in the right order</p>}

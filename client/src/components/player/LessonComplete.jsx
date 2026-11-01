@@ -25,7 +25,7 @@ export default function LessonComplete({ result, onContinue }) {
   const accuracy = total ? Math.round((total / (total + mistakes)) * 100) : 100;
 
   useEffect(() => {
-    confetti({ particleCount: 140, spread: 80, origin: { y: 0.6 }, colors: ['#6D4AFF', '#A3E635', '#FF9F1C', '#FF4D6D', '#38BDF8'] });
+    confetti({ particleCount: 140, spread: 80, origin: { y: 0.6 }, colors: ['#2F6BFF', '#FF2BD6', '#5CF2FF', '#A3E635', '#FFFFFF'] });
     if (courseCompleted) setTimeout(() => confetti({ particleCount: 200, spread: 120, origin: { y: 0.5 } }), 500);
   }, [courseCompleted]);
 
@@ -46,10 +46,10 @@ export default function LessonComplete({ result, onContinue }) {
         <h1 className="mt-4 text-3xl font-black text-flame-500">{courseCompleted ? 'Course complete! 🏆' : 'Lesson complete!'}</h1>
         {preview && <p className="mt-1 font-bold text-slate-400">Preview mode: nothing was saved</p>}
         {leveledUp && (
-          <p className="mt-3 rounded-2xl bg-sky-100 px-4 py-2 font-black text-sky-600">Level up! You're now level {user.levelInfo.level} 🎉</p>
+          <p className="mt-3 rounded-2xl bg-sky-400/15 px-4 py-2 font-black text-sky-300">Level up! You're now level {user.levelInfo.level} 🎉</p>
         )}
         {freezeEarned && (
-          <p className="mt-3 rounded-2xl bg-cyan-50 px-4 py-2 font-black text-cyan-600">
+          <p className="mt-3 rounded-2xl bg-cyan-400/10 px-4 py-2 font-black text-cyan-300">
             🧊 {user.streak.current}-day streak! You earned a streak freeze. It saves your streak if you miss a day.
           </p>
         )}

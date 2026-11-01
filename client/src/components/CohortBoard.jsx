@@ -25,7 +25,7 @@ export default function CohortBoard({ courseId, color }) {
 
   return (
     <section className="card mb-8 p-0">
-      <header className="flex items-center gap-3 border-b-2 border-slate-100 px-5 py-4">
+      <header className="flex items-center gap-3 border-b-2 border-white/5 px-5 py-4">
         <Flag className="size-6" style={{ color }} />
         <div className="flex-1">
           <h2 className="font-black">{data.cohort.name}</h2>
@@ -36,7 +36,7 @@ export default function CohortBoard({ courseId, color }) {
       </header>
       <ol>
         {[...shown, ...(meHidden ? [me] : [])].map((member) => (
-          <li key={member._id} className={`flex items-center gap-3 px-5 py-2.5 ${member.isMe ? 'bg-grape-50' : ''}`}>
+          <li key={member._id} className={`flex items-center gap-3 px-5 py-2.5 ${member.isMe ? 'bg-neon-500/10' : ''}`}>
             <span className="w-6 text-center font-black text-slate-400">{member.rank}</span>
             <span className="min-w-0 flex-1 truncate font-extrabold">
               {member.name}
@@ -45,7 +45,7 @@ export default function CohortBoard({ courseId, color }) {
             <span className="text-sm font-bold text-slate-400">
               {member.completed}/{data.totalLessons}
             </span>
-            <span className="flex w-20 items-center justify-end gap-1 font-black text-sky-500">
+            <span className="flex w-20 items-center justify-end gap-1 font-black text-sky-400">
               <Zap className="size-4" fill="currentColor" /> {member.xp}
             </span>
           </li>

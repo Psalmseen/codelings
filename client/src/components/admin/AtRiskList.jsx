@@ -45,7 +45,7 @@ export function AtRiskList() {
 
   return (
     <section className="card p-0">
-      <header className="border-b-2 border-slate-100 px-5 py-4">
+      <header className="border-b-2 border-white/5 px-5 py-4">
         <h2 className="text-lg font-black">Students who need a nudge</h2>
         <p className="text-sm font-bold text-slate-400">No lesson in 3+ days (or never started) with a course still to finish.</p>
       </header>
@@ -60,14 +60,14 @@ export function AtRiskList() {
         </div>
       )}
       {data?.students.length === 0 && (
-        <p className="flex items-center gap-2 px-5 py-6 font-bold text-lime-600">
+        <p className="flex items-center gap-2 px-5 py-6 font-bold text-lime-400">
           <PartyPopper className="size-5" /> Everyone's on track. Nobody needs a nudge right now!
         </p>
       )}
-      <ul className="divide-y-2 divide-slate-100">
+      <ul className="divide-y-2 divide-white/5">
         {data?.students.map((student) => (
           <li key={student._id} className="flex flex-wrap items-center gap-3 px-5 py-3">
-            <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-orange-100 font-black text-orange-600">
+            <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-orange-400/15 font-black text-orange-300">
               {student.name[0]?.toUpperCase()}
             </span>
             <div className="min-w-0 flex-1">
@@ -76,7 +76,7 @@ export function AtRiskList() {
                 {student.course.emoji} {student.course.title} · {student.course.completed}/{student.course.total} lessons
               </p>
             </div>
-            <span className={`badge ${student.daysInactive >= 7 ? 'bg-red-100 text-heart-500' : 'bg-orange-100 text-orange-600'}`}>
+            <span className={`badge ${student.daysInactive >= 7 ? 'bg-red-500/15 text-heart-500' : 'bg-orange-400/15 text-orange-300'}`}>
               {student.neverStarted ? `Not started (${student.daysInactive}d)` : `${student.daysInactive} days quiet`}
             </span>
             <NudgeButtons student={student} />

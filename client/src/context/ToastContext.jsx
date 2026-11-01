@@ -20,7 +20,7 @@ export function ToastProvider({ children }) {
           <div
             key={t.id}
             className={`flex items-center gap-2 rounded-2xl px-4 py-3 font-bold text-white shadow-lg ${
-              t.type === 'error' ? 'bg-heart-500' : 'bg-grape-900'
+              t.type === 'error' ? 'bg-heart-500 shadow-[0_0_24px_rgb(255_77_109/0.5)]' : 'glass-strong'
             }`}
           >
             {t.type === 'error' ? <CircleAlert className="size-5" /> : <CircleCheck className="size-5 text-lime-400" />}
