@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router';
+import { Link, useLocation, useNavigate } from 'react-router';
 import Mascot from '../components/Mascot';
 import { Spinner } from '../components/ui';
 import { homePath, useAuth } from '../context/AuthContext';
 
 export function AuthShell({ title, subtitle, children }) {
   return (
-    <div className="flex min-h-dvh flex-col items-center justify-center bg-neon-500/10 px-4 py-10">
+    <div className="flex min-h-dvh flex-col items-center justify-center px-4 py-10">
       <div className="w-full max-w-sm">
         <div className="mb-6 flex flex-col items-center text-center">
           <Mascot size={110} className="animate-float" />
@@ -73,7 +73,10 @@ export default function LoginPage() {
         </button>
       </form>
       <p className="mt-4 text-center text-sm font-semibold text-ink-muted">
-        New here? Open the invite link your tutor sent you.
+        New here?{' '}
+        <Link to="/apply" className="font-extrabold text-neon-300 underline light:text-neon-600">
+          Apply to join
+        </Link>
       </p>
     </AuthShell>
   );

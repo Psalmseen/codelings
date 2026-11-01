@@ -56,6 +56,9 @@ export function timeUntil(date) {
 export const formatDate = (date) =>
   new Date(date).toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
 
+/** A calendar date with no time of day (e.g. a birthday), shown the same in every timezone. */
+export const formatDay = (date) => new Date(date).toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+
 /** Today's date (YYYY-MM-DD) in a timezone, matching how the server stores streak days. */
 export const todayIn = (timezone) =>
   new Intl.DateTimeFormat('en-CA', { timeZone: timezone, year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());

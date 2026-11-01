@@ -1,5 +1,5 @@
 import { Link } from 'react-router';
-import { Activity, BookOpen, Sparkles, Ticket, Users } from 'lucide-react';
+import { Activity, BookOpen, Inbox, Sparkles, Users } from 'lucide-react';
 import { AtRiskList, RemindersCard } from '../../components/admin/AtRiskList';
 import { ErrorState, PageHeader, PageLoader } from '../../components/ui';
 import { useAuth } from '../../context/AuthContext';
@@ -39,7 +39,7 @@ export default function AdminDashboard() {
             value={data.courses}
             tint="bg-sky-400/15 text-sky-300 light:text-sky-700"
           />
-          <StatCard icon={Ticket} label="Pending invites" value={data.pendingInvites} tint="bg-orange-400/15 text-orange-300 light:text-orange-700" />
+          <StatCard icon={Inbox} label="Pending applications" value={data.pendingApplications} tint="bg-orange-400/15 text-orange-300 light:text-orange-700" />
         </div>
       )}
 
@@ -55,10 +55,10 @@ export default function AdminDashboard() {
           <p className="font-black">Build a course</p>
           <p className="text-sm font-semibold text-ink-muted">Add modules and lessons step by step</p>
         </Link>
-        <Link to="/admin/invites" className="card transition hover:border-neon-400/60">
-          <Ticket className="mb-2 size-7 text-orange-400 light:text-orange-600" />
-          <p className="font-black">Invite a student</p>
-          <p className="text-sm font-semibold text-ink-muted">Share a link by email or WhatsApp</p>
+        <Link to="/admin/applications" className="card transition hover:border-neon-400/60">
+          <Inbox className="mb-2 size-7 text-orange-400 light:text-orange-600" />
+          <p className="font-black">Review applications</p>
+          <p className="text-sm font-semibold text-ink-muted">Share your apply link and approve new students</p>
         </Link>
         <Link to="/admin/courses?import=1" className="card transition hover:border-neon-400/60">
           <Sparkles className="mb-2 size-7 text-flame-500" />

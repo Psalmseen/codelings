@@ -22,6 +22,12 @@ export async function requireAuth(req, res, next) {
     User.updateOne({ _id: user._id }, { lastSeenAt: new Date() }).catch(() => {});
   }
 
+  // Students signing in with an emailed temporary password must choose their own first
+  const allowed = req.originalUrl.startsWith('/api/auth/me') || req.originalUrl.startsWith('/api/auth/change-password');
+  if (user.mustChangePassword && !allowed) {
+    return res.status(403).json({ error: 'Please choose a new password first', code: 'PASSWORD_CHANGE_REQUIRED' });
+  }
+
   req.user = user;
   next();
 }

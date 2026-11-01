@@ -1,6 +1,8 @@
 import { useState } from 'react';
-import { BookCheck, Cpu, Flame, Footprints, GraduationCap, Lock, LogOut, Rocket, Snowflake, Sparkles, TrendingUp, Trophy, Zap } from 'lucide-react';
+import { Link } from 'react-router';
+import { BookCheck, KeyRound, Cpu, Flame, Footprints, GraduationCap, Lock, LogOut, Rocket, Snowflake, Sparkles, TrendingUp, Trophy, Zap } from 'lucide-react';
 import { AccuracyCard, ActivityCard, formatMinutes, WeeklyXpCard } from '../../components/StudentStatsCharts';
+import ReferralCard from '../../components/ReferralCard';
 import ThemeSwitch from '../../components/ThemeSwitch';
 import { ErrorState, PageLoader } from '../../components/ui';
 import { useAuth } from '../../context/AuthContext';
@@ -84,6 +86,8 @@ export default function ProfilePage() {
         <p className="mt-3 text-sm font-semibold text-ink-muted">🧊 You earn a streak freeze for every 7-day streak. It saves your streak if you miss a day.</p>
       </section>
 
+      {user.role === 'student' && <ReferralCard />}
+
       {stats.data && (
         <section className="space-y-4">
           <div className="flex items-end justify-between">
@@ -140,6 +144,9 @@ export default function ProfilePage() {
           <span className="mb-2 block font-extrabold">Appearance</span>
           <ThemeSwitch />
         </div>
+        <Link to="/change-password" className="btn btn-secondary w-full">
+          <KeyRound className="size-4" /> Change password
+        </Link>
         <button className="btn btn-secondary w-full" onClick={logout}>
           <LogOut className="size-4" /> Sign out
         </button>

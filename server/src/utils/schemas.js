@@ -6,13 +6,41 @@ const email = z.string().trim().toLowerCase().email('Enter a valid email');
 
 export const loginInput = z.object({ email, password: z.string().min(1, 'Enter your password') });
 
-export const registerInput = z.object({
-  code: text.min(1),
-  name: text.min(1, 'Enter your name').max(60),
+const optionalChoice = (values) => z.union([z.literal(''), z.enum(values)]).default('');
+
+export const applyInput = z.object({
+  name: text.min(2, 'Enter your full name').max(80),
   email,
-  password: z.string().min(8, 'Password must be at least 8 characters'),
-  timezone: z.string().optional(),
+  phone: z.string().trim().regex(/^\+?[\d\s()-]{7,20}$/, 'Enter a valid phone number'),
+  referralCode: text.max(30).default(''),
+  dateOfBirth: z
+    .union([z.literal(''), z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Enter a valid date of birth')])
+    .default('')
+    .refine((d) => !d || (new Date(d) < new Date() && new Date(d) > new Date('1900-01-01')), 'Enter a valid date of birth'),
+  gender: optionalChoice(['female', 'male', 'other', 'prefer_not']),
+  city: text.max(80).default(''),
+  country: text.max(80).default(''),
+  occupation: text.max(120).default(''),
+  experience: optionalChoice(['none', 'a_little', 'some']),
+  goals: text.max(1000).default(''),
+  hasLaptop: optionalChoice(['yes', 'no', 'shared']),
+  preferredTime: optionalChoice(['morning', 'afternoon', 'evening', 'weekends']),
+  timezone: z.string().max(60).default(''),
 });
+
+export const approveInput = z.object({
+  courseIds: z.array(objectId).default([]),
+  cohortIds: z.array(objectId).default([]),
+});
+
+export const rejectInput = z.object({ note: text.max(1000).default('') });
+
+export const changePasswordInput = z
+  .object({
+    currentPassword: z.string().min(1, 'Enter your current password'),
+    newPassword: z.string().min(8, 'Your new password must be at least 8 characters'),
+  })
+  .refine((p) => p.newPassword !== p.currentPassword, { message: 'Choose a password different from your current one', path: ['newPassword'] });
 
 export const profileInput = z.object({
   name: text.min(1).max(60).optional(),
@@ -125,15 +153,6 @@ export const courseImportInput = z.object({
 export const cohortInput = z.object({
   name: text.min(1, 'Give the cohort a name').max(80),
   startDate: z.coerce.date({ message: 'Pick a start date' }),
-});
-
-export const inviteInput = z.object({
-  name: text.max(60).default(''),
-  email: z.union([z.literal(''), email]).default(''),
-  courseIds: z.array(objectId).default([]),
-  cohortIds: z.array(objectId).default([]),
-  expiresInDays: z.number().int().min(1).max(90).default(14),
-  sendEmail: z.boolean().default(false),
 });
 
 export const attemptInput = z.object({

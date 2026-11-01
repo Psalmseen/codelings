@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router';
-import { BarChart3, Flame, Plus, X, Zap } from 'lucide-react';
+import { BarChart3, Flame, Inbox, Plus, X, Zap } from 'lucide-react';
 import { EmptyState, ErrorState, PageHeader, PageLoader } from '../../components/ui';
 import { useToast } from '../../context/ToastContext';
 import { useFetch } from '../../hooks/useFetch';
@@ -97,8 +97,8 @@ export default function AdminStudents() {
   return (
     <>
       <PageHeader title="Students" subtitle="See who's learning and manage their courses.">
-        <Link to="/admin/invites" className="btn btn-primary">
-          <Plus className="size-4" /> Invite student
+        <Link to="/admin/applications" className="btn btn-primary">
+          <Inbox className="size-4" /> Applications
         </Link>
       </PageHeader>
 
@@ -106,9 +106,9 @@ export default function AdminStudents() {
       {students.error && <ErrorState error={students.error} onRetry={students.reload} />}
       {students.data?.students.length === 0 && (
         <EmptyState title="No students yet">
-          <p className="font-semibold text-ink-muted">Send an invite link to get your first learner in.</p>
-          <Link to="/admin/invites" className="btn btn-primary">
-            Create an invite
+          <p className="font-semibold text-ink-muted">Share your apply link, then approve applications to add students.</p>
+          <Link to="/admin/applications" className="btn btn-primary">
+            Go to applications
           </Link>
         </EmptyState>
       )}
@@ -127,7 +127,9 @@ export default function AdminStudents() {
                     {student.name}
                   </Link>
                   <p className="truncate text-sm font-semibold text-ink-muted">
-                    {student.email} · last seen {timeAgo(student.lastSeenAt)}
+                    {student.email}
+                    {student.phone && ` · ${student.phone}`} · last seen {timeAgo(student.lastSeenAt)}
+                    {student.referrals > 0 && ` · referred ${student.referrals}`}
                   </p>
                 </div>
                 <Link to={`/admin/students/${student._id}`} className="btn btn-secondary btn-sm">

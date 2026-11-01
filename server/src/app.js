@@ -8,9 +8,9 @@ import morgan from 'morgan';
 import { env } from './config/env.js';
 import { errorHandler, notFound } from './middleware/error.js';
 import adminRoutes from './routes/admin/index.js';
+import applyRoutes from './routes/apply.js';
 import authRoutes from './routes/auth.js';
 import cronRoutes from './routes/cron.js';
-import inviteRoutes from './routes/invites.js';
 import learnRoutes from './routes/learn.js';
 
 // In production the built React app is served by this same server
@@ -37,7 +37,7 @@ export function createApp() {
   app.use('/api/auth/login', authLimiter);
   app.use('/api/auth/register', authLimiter);
   app.use('/api/auth', authRoutes);
-  app.use('/api/invites', inviteRoutes);
+  app.use('/api/apply', applyRoutes);
   app.use('/api/learn', learnRoutes);
   app.use('/api/admin', adminRoutes);
   app.use('/api/cron', cronRoutes);

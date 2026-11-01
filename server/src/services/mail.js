@@ -78,26 +78,73 @@ function layout({ heading, body, buttonText, buttonUrl, footer = '' }) {
 </body></html>`;
 }
 
-export function inviteEmail({ to, name, link, courseTitles }) {
-  const greeting = name ? `Hi ${escapeHtml(name)}!` : 'Hi there!';
-  const courses = courseTitles.length
-    ? ` You've got a spot in <b>${courseTitles.map(escapeHtml).join('</b>, <b>')}</b>.`
-    : '';
+const firstName = (name) => escapeHtml(name.trim().split(/\s+/)[0]);
+
+function layoutNoButton({ heading, body }) {
+  return layout({ heading, body, buttonText: '', buttonUrl: '' }).replace(/<tr><td><a href=""[^]*?<\/a><\/td><\/tr>/, '');
+}
+
+export function applicationReceivedEmail({ to, name }) {
   return {
     to,
-    subject: "You're invited to learn to code on Codelings 🐛",
-    text: `${greeting} You've been invited to Codelings. Create your account here: ${link}`,
+    subject: 'We got your Codelings application 🐛',
+    text: `Hi ${name}! Thanks for applying to Codelings. We'll review your application and email you as soon as it's approved.`,
+    html: layoutNoButton({
+      heading: `Thanks for applying, ${firstName(name)}!`,
+      body: "We've received your application to join Codelings. Your tutor will review it soon, and you'll get an email with your login details as soon as it's approved.",
+    }),
+  };
+}
+
+export function newApplicationEmail({ to, applicant, reviewLink }) {
+  const referral = applicant.referrerName ? ` Referred by <b>${escapeHtml(applicant.referrerName)}</b>.` : '';
+  return {
+    to,
+    subject: `New Codelings application: ${applicant.name}`,
+    text: `${applicant.name} (${applicant.email}, ${applicant.phone}) applied to Codelings. Review it: ${reviewLink}`,
     html: layout({
-      heading: `${greeting} Your coding adventure starts now.`,
-      body: `You've been invited to join Codelings.${courses} Bite-sized lessons, streaks, XP and leagues. Learning to code just became a game.`,
-      buttonText: 'Accept invite',
-      buttonUrl: link,
+      heading: 'New application to review',
+      body: `<b>${escapeHtml(applicant.name)}</b> (${escapeHtml(applicant.email)}, ${escapeHtml(applicant.phone)}) wants to join.${referral}`,
+      buttonText: 'Review application',
+      buttonUrl: reviewLink,
+    }),
+  };
+}
+
+export function approvedEmail({ to, name, tempPassword, loginLink, courseTitles }) {
+  const courses = courseTitles.length ? ` You're enrolled in <b>${courseTitles.map(escapeHtml).join('</b>, <b>')}</b>.` : '';
+  return {
+    to,
+    subject: "You're in! Your Codelings login 🎉",
+    text: `Hi ${name}! Your Codelings application was approved. Sign in at ${loginLink} with email ${to} and temporary password ${tempPassword}. You'll be asked to choose your own password.`,
+    html: layout({
+      heading: `Welcome to Codelings, ${firstName(name)}! 🎉`,
+      body: `Your application was approved.${courses}<br><br>
+        Sign in with:<br>
+        Email: <b>${escapeHtml(to)}</b><br>
+        Temporary password: <b style="font-family:monospace;font-size:18px;letter-spacing:1px">${escapeHtml(tempPassword)}</b><br><br>
+        You'll choose your own password the first time you sign in.`,
+      buttonText: 'Sign in',
+      buttonUrl: loginLink,
+    }),
+  };
+}
+
+export function rejectedEmail({ to, name, note }) {
+  const noteHtml = note ? `<br><br><i>"${escapeHtml(note)}"</i>` : '';
+  return {
+    to,
+    subject: 'About your Codelings application',
+    text: `Hi ${name}, thank you for applying to Codelings. Unfortunately we can't offer you a place right now.${note ? ` Note from your tutor: ${note}` : ''}`,
+    html: layoutNoButton({
+      heading: `Hi ${firstName(name)},`,
+      body: `Thank you for applying to Codelings. Unfortunately we can't offer you a place right now.${noteHtml}`,
     }),
   };
 }
 
 export function streakReminderEmail({ to, name, streak, freezes, courseTitle, lessonTitle, link, settingsLink }) {
-  const first = escapeHtml(name.trim().split(/\s+/)[0]);
+  const first = firstName(name);
   const freezeNote = freezes > 0 ? ' You have a streak freeze saved, but why spend it?' : '';
   return {
     to,

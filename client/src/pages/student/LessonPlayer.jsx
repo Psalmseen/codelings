@@ -181,7 +181,7 @@ export default function LessonPlayer() {
       </div>
 
       {practising && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-app">
+        <div className="fixed inset-0 z-50 overflow-y-auto">
           <PracticeRound doneLabel="Back to the lesson" onClose={() => setPractising(false)} onDone={() => setPractising(false)} />
         </div>
       )}

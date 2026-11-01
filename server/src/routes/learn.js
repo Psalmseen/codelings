@@ -4,6 +4,7 @@ import Enrollment from '../models/Enrollment.js';
 import LeagueMembership from '../models/LeagueMembership.js';
 import LessonAttempt from '../models/LessonAttempt.js';
 import Lesson from '../models/Lesson.js';
+import Application from '../models/Application.js';
 import User from '../models/User.js';
 import { requireAuth } from '../middleware/auth.js';
 import { studentAnalytics } from '../services/analytics.js';
@@ -280,6 +281,18 @@ router.post('/attempts/:id/answers', async (req, res) => {
 // A student's own statistics (no question-level detail)
 router.get('/stats', async (req, res) => {
   res.json(await studentAnalytics(req.user._id, { detail: false }));
+});
+
+router.get('/referrals', async (req, res) => {
+  const [joined, pending] = await Promise.all([
+    User.find({ referredBy: req.user._id }).select('name createdAt').sort({ createdAt: -1 }),
+    Application.countDocuments({ referredBy: req.user._id, status: 'pending' }),
+  ]);
+  res.json({
+    code: req.user.referralCode ?? null,
+    joined: joined.map((u) => ({ name: u.name.split(' ')[0], joinedAt: u.createdAt })),
+    pending,
+  });
 });
 
 // This week's league group

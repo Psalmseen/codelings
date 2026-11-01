@@ -2,7 +2,6 @@ import { Router } from 'express';
 import Cohort from '../../models/Cohort.js';
 import Course from '../../models/Course.js';
 import Enrollment from '../../models/Enrollment.js';
-import Invite from '../../models/Invite.js';
 import Lesson from '../../models/Lesson.js';
 import { countEnrollments, countLessons, lessonSummaries } from '../../services/stats.js';
 import { HttpError } from '../../utils/httpError.js';
@@ -121,13 +120,7 @@ router.delete('/:id', async (req, res) => {
   await Promise.all([
     Lesson.deleteMany({ course: course._id }),
     Enrollment.deleteMany({ course: course._id }),
-    Invite.updateMany({ courses: course._id }, { $pull: { courses: course._id } }),
-    Cohort.find({ course: course._id }).then((cohorts) =>
-      Promise.all([
-        Invite.updateMany({}, { $pullAll: { cohorts: cohorts.map((c) => c._id) } }),
-        Cohort.deleteMany({ course: course._id }),
-      ])
-    ),
+    Cohort.deleteMany({ course: course._id }),
   ]);
   await course.deleteOne();
   res.status(204).end();
@@ -200,7 +193,6 @@ router.delete('/:id/cohorts/:cohortId', async (req, res) => {
   const cohort = await loadCohort(course, req.params.cohortId);
   await Promise.all([
     Enrollment.updateMany({ cohort: cohort._id }, { cohort: null }),
-    Invite.updateMany({ cohorts: cohort._id }, { $pull: { cohorts: cohort._id } }),
     cohort.deleteOne(),
   ]);
   res.json(await builderView(course));

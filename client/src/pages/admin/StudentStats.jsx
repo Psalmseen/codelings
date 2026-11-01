@@ -58,6 +58,67 @@ function HardestQuestions({ questions }) {
   );
 }
 
+const DETAIL_LABELS = {
+  gender: { female: 'Female', male: 'Male', other: 'Other', prefer_not: 'Prefers not to say' },
+  experience: { none: 'No coding before joining', a_little: 'A little coding before joining', some: 'Some coding before joining' },
+  hasLaptop: { yes: 'Has a laptop', shared: 'Shares a laptop', no: 'Phone only' },
+  preferredTime: { morning: 'Prefers mornings', afternoon: 'Prefers afternoons', evening: 'Prefers evenings', weekends: 'Prefers weekends' },
+};
+
+/** Contact, application answers and referrals. */
+function StudentDetails({ data }) {
+  const a = data.application;
+  const facts = [
+    data.contact.phone && `📞 ${data.contact.phone}`,
+    a?.dateOfBirth && `🎂 ${Math.floor((Date.now() - new Date(a.dateOfBirth)) / 31557600000)} years old`,
+    a && DETAIL_LABELS.gender[a.gender],
+    a && [a.city, a.country].filter(Boolean).join(', '),
+    a?.occupation,
+    a && DETAIL_LABELS.experience[a.experience],
+    a && DETAIL_LABELS.hasLaptop[a.hasLaptop],
+    a && DETAIL_LABELS.preferredTime[a.preferredTime],
+    a?.appliedAt && `Applied ${formatDate(a.appliedAt)}`,
+  ].filter(Boolean);
+
+  return (
+    <section className="card space-y-3">
+      <div className="flex flex-wrap gap-1.5">
+        {facts.map((fact) => (
+          <span key={fact} className="badge bg-tint/10 py-1 text-ink-2">
+            {fact}
+          </span>
+        ))}
+      </div>
+      {a?.goals && <p className="rounded-xl bg-tint/5 px-3 py-2 text-sm font-semibold text-ink-2">🎯 “{a.goals}”</p>}
+      <p className="text-sm font-semibold text-ink-muted">
+        {data.referredBy ? (
+          <>
+            Referred by{' '}
+            <Link to={`/admin/students/${data.referredBy._id}`} className="font-extrabold text-ink-2 underline">
+              {data.referredBy.name}
+            </Link>
+            .{' '}
+          </>
+        ) : null}
+        Referral code <code className="font-bold text-ink-2">{data.contact.referralCode || '–'}</code>
+        {data.referred.length > 0 && (
+          <>
+            {' '}· brought in {data.referred.length}:{' '}
+            {data.referred.map((r, i) => (
+              <span key={r._id}>
+                {i > 0 && ', '}
+                <Link to={`/admin/students/${r._id}`} className="font-extrabold text-ink-2 underline">
+                  {r.name}
+                </Link>
+              </span>
+            ))}
+          </>
+        )}
+      </p>
+    </section>
+  );
+}
+
 export default function StudentStats() {
   const { studentId } = useParams();
   const toast = useToast();
@@ -108,6 +169,8 @@ export default function StudentStats() {
           {downloading ? <Spinner className="size-4" /> : <Download className="size-4" />} Every answer (CSV)
         </button>
       </section>
+
+      <StudentDetails data={data} />
 
       {!totals.trackingSince && (
         <p className="glass flex items-center gap-2 rounded-2xl px-4 py-3 text-sm font-bold text-ink-2">

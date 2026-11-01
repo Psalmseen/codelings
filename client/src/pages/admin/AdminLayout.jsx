@@ -1,5 +1,6 @@
 import { NavLink, Outlet } from 'react-router';
-import { BarChart3, BookOpen, LayoutDashboard, LogOut, Ticket, Users } from 'lucide-react';
+import { BarChart3, BookOpen, Inbox, LayoutDashboard, LogOut, Users } from 'lucide-react';
+import { useFetch } from '../../hooks/useFetch';
 import { Logo } from '../../components/Mascot';
 import ThemeSwitch from '../../components/ThemeSwitch';
 import { useAuth } from '../../context/AuthContext';
@@ -9,11 +10,12 @@ const NAV = [
   { to: '/admin/courses', label: 'Courses', icon: BookOpen },
   { to: '/admin/students', label: 'Students', icon: Users },
   { to: '/admin/analytics', label: 'Analytics', icon: BarChart3 },
-  { to: '/admin/invites', label: 'Invites', icon: Ticket },
+  { to: '/admin/applications', label: 'Applications', icon: Inbox, badge: 'pendingApplications' },
 ];
 
 export default function AdminLayout() {
   const { user, logout } = useAuth();
+  const { data: stats } = useFetch('/admin/stats');
 
   return (
     <div className="min-h-dvh lg:flex">
@@ -28,7 +30,7 @@ export default function AdminLayout() {
           </div>
         </div>
         <nav className="flex gap-1 overflow-x-auto px-3 pb-3 lg:flex-1 lg:flex-col">
-          {NAV.map(({ to, label, icon: Icon, end }) => (
+          {NAV.map(({ to, label, icon: Icon, end, badge }) => (
             <NavLink
               key={to}
               to={to}
@@ -41,6 +43,9 @@ export default function AdminLayout() {
             >
               <Icon className="size-5" />
               {label}
+              {badge && stats?.[badge] > 0 && (
+                <span className="ml-auto rounded-full bg-plasma-500 px-2 py-0.5 text-xs font-black text-white shadow-[0_0_12px_var(--color-plasma-500)]">{stats[badge]}</span>
+              )}
             </NavLink>
           ))}
         </nav>

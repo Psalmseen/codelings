@@ -16,7 +16,10 @@ async function loadStudent(id) {
 }
 
 router.get('/', async (_req, res) => {
-  const students = await User.find({ role: 'student' }).sort({ createdAt: -1 });
+  const students = await User.find({ role: 'student' }).sort({ createdAt: -1 }).populate('referredBy', 'name');
+  const referralCounts = new Map(
+    (await User.aggregate([{ $match: { referredBy: { $ne: null } } }, { $group: { _id: '$referredBy', count: { $sum: 1 } } }])).map((r) => [String(r._id), r.count])
+  );
   const enrollments = await Enrollment.find({ user: { $in: students.map((s) => s._id) } })
     .populate('course', 'title emoji pacing')
     .populate('cohort', 'name startDate')
@@ -41,7 +44,7 @@ router.get('/', async (_req, res) => {
   }
 
   res.json({
-    students: students.map((s) => ({ ...s.toJSON(), enrollments: byStudent.get(String(s._id)) ?? [] })),
+    students: students.map((s) => ({ ...s.toJSON(), referrals: referralCounts.get(String(s._id)) ?? 0, enrollments: byStudent.get(String(s._id)) ?? [] })),
   });
 });
 

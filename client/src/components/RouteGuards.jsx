@@ -20,5 +20,7 @@ export function RequireAuth({ roles, children }) {
   if (loading) return <PageLoader />;
   if (!user) return <Navigate to="/login" replace state={{ from: location.pathname }} />;
   if (!roles.includes(user.role)) return <Navigate to={homePath(user)} replace />;
+  // Accounts created with an emailed temporary password must set their own first
+  if (user.mustChangePassword && location.pathname !== '/change-password') return <Navigate to="/change-password" replace />;
   return children;
 }

@@ -7,6 +7,12 @@ const userSchema = new mongoose.Schema(
     email: { type: String, required: true, unique: true, lowercase: true, trim: true },
     passwordHash: { type: String, required: true, select: false },
     role: { type: String, enum: ['admin', 'student'], default: 'student' },
+    phone: { type: String, default: '' },
+    // Set when an account starts with an emailed temporary password
+    mustChangePassword: { type: Boolean, default: false },
+    referralCode: { type: String, default: undefined }, // students share it so friends can apply
+    referredBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null },
+    application: { type: mongoose.Schema.Types.ObjectId, ref: 'Application', default: null },
     xp: { type: Number, default: 0 },
     streak: {
       current: { type: Number, default: 0 },
@@ -37,6 +43,8 @@ const userSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+userSchema.index({ referralCode: 1 }, { unique: true, sparse: true });
 
 userSchema.virtual('levelInfo').get(function () {
   return levelInfo(this.xp);

@@ -1,3 +1,4 @@
+import Application from '../models/Application.js';
 import Cohort from '../models/Cohort.js';
 import Course from '../models/Course.js';
 import Enrollment from '../models/Enrollment.js';
@@ -103,9 +104,12 @@ export async function studentAnalytics(userId, { detail = true } = {}) {
   const user = await User.findById(userId).lean();
   if (!user) return null;
 
-  const [attempts, enrollments] = await Promise.all([
+  const [attempts, enrollments, application, referrer, referred] = await Promise.all([
     LessonAttempt.find({ user: user._id }).sort({ startedAt: 1 }).lean(),
     Enrollment.find({ user: user._id }).populate('course', 'title emoji color modules').populate('cohort', 'name startDate').lean(),
+    detail && user.application ? Application.findById(user.application).lean() : null,
+    detail && user.referredBy ? User.findById(user.referredBy).select('name').lean() : null,
+    detail ? User.find({ referredBy: user._id }).select('name createdAt').sort({ createdAt: -1 }).lean() : [],
   ]);
   const summary = summarize(attempts);
   const answers = flattenAnswers(attempts);
@@ -339,6 +343,21 @@ export async function studentAnalytics(userId, { detail = true } = {}) {
 
   return {
     ...result,
+    contact: { phone: user.phone ?? '', referralCode: user.referralCode ?? '' },
+    application: application && {
+      dateOfBirth: application.dateOfBirth,
+      gender: application.gender,
+      city: application.city,
+      country: application.country,
+      occupation: application.occupation,
+      experience: application.experience,
+      goals: application.goals,
+      hasLaptop: application.hasLaptop,
+      preferredTime: application.preferredTime,
+      appliedAt: application.createdAt,
+    },
+    referredBy: referrer && { _id: referrer._id, name: referrer.name },
+    referred: referred.map((r) => ({ _id: r._id, name: r.name, joinedAt: r.createdAt })),
     hardestQuestions,
     lessons,
     codeChallenges,
