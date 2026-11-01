@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router';
 import { BellRing, Copy, Mail, MessageCircle, PartyPopper } from 'lucide-react';
 import { useToast } from '../../context/ToastContext';
 import { useFetch } from '../../hooks/useFetch';
@@ -71,7 +72,9 @@ export function AtRiskList() {
               {student.name[0]?.toUpperCase()}
             </span>
             <div className="min-w-0 flex-1">
-              <p className="truncate font-extrabold">{student.name}</p>
+              <Link to={`/admin/students/${student._id}`} className="block truncate font-extrabold hover:text-neon-300 light:hover:text-neon-600">
+                {student.name}
+              </Link>
               <p className="truncate text-sm font-semibold text-ink-muted">
                 {student.course.emoji} {student.course.title} · {student.course.completed}/{student.course.total} lessons
               </p>

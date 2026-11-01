@@ -6,6 +6,7 @@ import { clientUrl } from '../../config/env.js';
 import { requireAdmin, requireAuth } from '../../middleware/auth.js';
 import { sendMail, streakReminderEmail } from '../../services/mail.js';
 import { studentsAtRisk } from '../../services/reminders.js';
+import analytics from './analytics.js';
 import courses from './courses.js';
 import invites from './invites.js';
 import lessons from './lessons.js';
@@ -53,6 +54,7 @@ router.post('/reminders/test', async (req, res) => {
   res.json({ sent: true, to: req.user.email });
 });
 
+router.use('/analytics', analytics);
 router.use('/courses', courses);
 router.use('/lessons', lessons);
 router.use('/invites', invites);

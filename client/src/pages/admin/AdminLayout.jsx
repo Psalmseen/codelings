@@ -1,5 +1,5 @@
 import { NavLink, Outlet } from 'react-router';
-import { BookOpen, LayoutDashboard, LogOut, Ticket, Users } from 'lucide-react';
+import { BarChart3, BookOpen, LayoutDashboard, LogOut, Ticket, Users } from 'lucide-react';
 import { Logo } from '../../components/Mascot';
 import ThemeSwitch from '../../components/ThemeSwitch';
 import { useAuth } from '../../context/AuthContext';
@@ -8,6 +8,7 @@ const NAV = [
   { to: '/admin', label: 'Dashboard', icon: LayoutDashboard, end: true },
   { to: '/admin/courses', label: 'Courses', icon: BookOpen },
   { to: '/admin/students', label: 'Students', icon: Users },
+  { to: '/admin/analytics', label: 'Analytics', icon: BarChart3 },
   { to: '/admin/invites', label: 'Invites', icon: Ticket },
 ];
 

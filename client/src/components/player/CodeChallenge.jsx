@@ -53,7 +53,7 @@ export default function CodeChallenge({ exercise, value, onChange, locked, ref }
   }, [value]);
 
   useImperativeHandle(ref, () => ({
-    /** Runs every check against the current code; resolves to { passed, passedCount, total }. */
+    /** Runs every check against the current code; resolves to { passed, passedCount, total, failed labels }. */
     run() {
       const runId = ++runCounter.current;
       clearTimeout(previewTimer.current); // a pending preview refresh would replace the test run
@@ -64,7 +64,8 @@ export default function CodeChallenge({ exercise, value, onChange, locked, ref }
           setResults(checkResults);
           setRuntimeErrors(errors);
           const passedCount = checkResults.filter((r) => r.passed).length;
-          resolve({ passed: passedCount === checkResults.length, passedCount, total: checkResults.length });
+          const failed = exercise.tests.filter((_, i) => !checkResults[i]?.passed).map((t) => t.label);
+          resolve({ passed: passedCount === checkResults.length, passedCount, total: checkResults.length, failed });
         };
         const onMessage = (event) => {
           const data = event.data;

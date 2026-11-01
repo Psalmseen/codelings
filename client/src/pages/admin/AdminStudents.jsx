@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router';
-import { Flame, Plus, X, Zap } from 'lucide-react';
+import { BarChart3, Flame, Plus, X, Zap } from 'lucide-react';
 import { EmptyState, ErrorState, PageHeader, PageLoader } from '../../components/ui';
 import { useToast } from '../../context/ToastContext';
 import { useFetch } from '../../hooks/useFetch';
@@ -123,11 +123,16 @@ export default function AdminStudents() {
                   {student.name[0]?.toUpperCase()}
                 </span>
                 <div className="min-w-0 flex-1">
-                  <p className="truncate font-black">{student.name}</p>
+                  <Link to={`/admin/students/${student._id}`} className="block truncate font-black hover:text-neon-300 light:hover:text-neon-600">
+                    {student.name}
+                  </Link>
                   <p className="truncate text-sm font-semibold text-ink-muted">
                     {student.email} · last seen {timeAgo(student.lastSeenAt)}
                   </p>
                 </div>
+                <Link to={`/admin/students/${student._id}`} className="btn btn-secondary btn-sm">
+                  <BarChart3 className="size-4" /> Stats
+                </Link>
                 <div className="flex items-center gap-3 font-black">
                   <span className="badge py-1 text-white" style={{ backgroundColor: tier.color }} title="League">
                     {tier.emoji} {tier.name}

@@ -67,6 +67,10 @@ In production one Node service serves both the API and the built React app (`npm
 
 Students can install the app from their phone browser ("Add to Home screen").
 
+## Statistics
+
+Every lesson and practice round is recorded as a session (`LessonAttempt`) with each answer: right or wrong, what was answered, time taken, and failed code checks. Admin → **Analytics** shows class-wide numbers (activity, where students drop off, hardest questions, leaderboards, cohorts); each student's page (Students → **Stats**) shows their activity calendar, time, accuracy, mistakes, code challenges, sessions and league history. Both export to CSV. Students see a lighter version on their profile.
+
 ## Background jobs
 
 Two jobs run hourly inside the server (node-cron): closing finished league weeks, and sending streak reminders at 7pm in each student's timezone. They also run whenever `/api/cron/run?key=CRON_SECRET` is called, which is how a free host that sleeps gets woken up (see step 4 above). Runs never overlap, and each student gets at most one reminder a day. League weeks also close when someone opens the league page.

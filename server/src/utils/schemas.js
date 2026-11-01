@@ -136,5 +136,22 @@ export const inviteInput = z.object({
   sendEmail: z.boolean().default(false),
 });
 
+export const attemptInput = z.object({
+  kind: z.enum(['lesson', 'practice']),
+  lessonId: objectId.optional(),
+});
+
+export const answerInput = z.object({
+  exerciseId: objectId,
+  lessonId: objectId,
+  type: z.enum(['mcq', 'fill_blank', 'order_code', 'code_challenge']),
+  correct: z.boolean(),
+  answer: z.string().max(4000).default(''),
+  timeMs: z.number().int().min(0).max(24 * 60 * 60 * 1000).default(0),
+  failedChecks: z.array(z.string().max(300)).max(20).optional(),
+});
+
+export const finishInput = z.object({ attemptId: objectId.nullable().optional() });
+
 export const enrollInput = z.object({ courseId: objectId, cohortId: objectId.nullable().optional() });
 export const enrollmentCohortInput = z.object({ cohortId: objectId.nullable() });

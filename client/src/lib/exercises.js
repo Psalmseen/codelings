@@ -72,3 +72,23 @@ export function correctAnswer(exercise) {
       return '';
   }
 }
+
+/** The student's answer as readable text, for statistics. */
+export function describeAnswer(exercise, value) {
+  switch (exercise.type) {
+    case 'mcq':
+      return exercise.options[value] ?? '';
+    case 'fill_blank':
+      return value.join(' | ');
+    case 'order_code':
+      return value.picked.map((i) => exercise.lines[i]).join(' ⏎ ');
+    case 'code_challenge':
+      return ['html', 'css', 'js']
+        .filter((lang) => value[lang]?.trim())
+        .map((lang) => `${lang.toUpperCase()}:\n${value[lang].trim()}`)
+        .join('\n\n')
+        .slice(0, 4000);
+    default:
+      return '';
+  }
+}

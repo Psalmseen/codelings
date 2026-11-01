@@ -37,3 +37,15 @@ export async function api(path, { method = 'GET', body } = {}) {
   }
   return data;
 }
+
+/** Downloads a file from an authenticated endpoint (a plain link can't send the token). */
+export async function downloadFile(path) {
+  const token = getToken();
+  const res = await fetch(`${BASE_URL}/api${path}`, { headers: token ? { Authorization: `Bearer ${token}` } : {} });
+  if (!res.ok) throw new ApiError((await res.json().catch(() => ({}))).error ?? 'Download failed', res.status);
+  const filename = res.headers.get('Content-Disposition')?.match(/filename="([^"]+)"/)?.[1] ?? 'download.csv';
+  const url = URL.createObjectURL(await res.blob());
+  const link = Object.assign(document.createElement('a'), { href: url, download: filename });
+  link.click();
+  URL.revokeObjectURL(url);
+}

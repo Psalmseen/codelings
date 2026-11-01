@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router';
 import { Heart } from 'lucide-react';
 import Mascot from '../../components/Mascot';
@@ -75,6 +75,18 @@ export default function LessonPlayer() {
     setResult(null);
   }, [lessonId]);
 
+  // Statistics: one tracked session per lesson opening (admin previews aren't tracked)
+  const attemptId = useRef(null);
+  const startedFor = useRef(null);
+  useEffect(() => {
+    if (!data || data.preview || startedFor.current === lessonId) return;
+    startedFor.current = lessonId;
+    attemptId.current = null;
+    api('/learn/attempts', { method: 'POST', body: { kind: 'lesson', lessonId } })
+      .then((res) => (attemptId.current = res.attemptId))
+      .catch(() => {});
+  }, [data, lessonId]);
+
   if (loading && !data) return <PageLoader />;
   if (error) {
     return (
@@ -95,7 +107,7 @@ export default function LessonPlayer() {
     setStats(runStats);
     setStage('saving');
     try {
-      const response = await api(`/learn/lessons/${lessonId}/complete`, { method: 'POST' });
+      const response = await api(`/learn/lessons/${lessonId}/complete`, { method: 'POST', body: { attemptId: attemptId.current } });
       if (!response.preview) setUser(response.user);
       setResult({ ...response, ...runStats });
       sounds.complete();
@@ -103,6 +115,14 @@ export default function LessonPlayer() {
     } catch {
       setStage('saveError');
     }
+  }
+
+  function trackAnswer({ exercise, correct, answer, timeMs, failedChecks }) {
+    if (!attemptId.current) return;
+    api(`/learn/attempts/${attemptId.current}/answers`, {
+      method: 'POST',
+      body: { exerciseId: exercise._id, lessonId, type: exercise.type, correct, answer, timeMs, failedChecks },
+    }).catch(() => {}); // statistics must never interrupt the lesson
   }
 
   async function loseHeart() {
@@ -152,6 +172,7 @@ export default function LessonPlayer() {
           exercises={lesson.exercises}
           hearts={hearts}
           paused={practising || outOfHearts || confirmQuit}
+          onAnswer={trackAnswer}
           onCodeFail={preview ? undefined : loseHeart}
           onOutOfHearts={() => setOutOfHearts(true)}
           onFinish={complete}

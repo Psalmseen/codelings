@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Heart } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useFetch } from '../../hooks/useFetch';
@@ -15,10 +15,29 @@ export default function PracticeRound({ onClose, onDone, doneLabel = 'Back to le
   const { data, loading, error, reload } = useFetch('/learn/practice');
   const [stage, setStage] = useState('playing'); // playing | saving | done | error
 
+  // Statistics: track this round as one session
+  const attemptId = useRef(null);
+  const started = useRef(false);
+  useEffect(() => {
+    if (started.current) return;
+    started.current = true;
+    api('/learn/attempts', { method: 'POST', body: { kind: 'practice' } })
+      .then((res) => (attemptId.current = res.attemptId))
+      .catch(() => {});
+  }, []);
+
+  function trackAnswer({ exercise, correct, answer, timeMs }) {
+    if (!attemptId.current) return;
+    api(`/learn/attempts/${attemptId.current}/answers`, {
+      method: 'POST',
+      body: { exerciseId: exercise._id, lessonId: exercise.lessonId, type: exercise.type, correct, answer, timeMs },
+    }).catch(() => {});
+  }
+
   async function refill() {
     setStage('saving');
     try {
-      const { user } = await api('/learn/practice/complete', { method: 'POST' });
+      const { user } = await api('/learn/practice/complete', { method: 'POST', body: { attemptId: attemptId.current } });
       setUser(user);
       sounds.complete();
       setStage('done');
@@ -37,7 +56,8 @@ export default function PracticeRound({ onClose, onDone, doneLabel = 'Back to le
   if (error) return <ErrorState error={error} onRetry={reload} />;
 
   if (stage === 'playing' && !empty) {
-    return <ExerciseRunner exercises={data.exercises} onClose={onClose} onFinish={refill} />;
+    // Keyed by the question set: the runner's state belongs to one set of exercises
+    return <ExerciseRunner key={data.exercises.map((e) => e._id).join()} exercises={data.exercises} onAnswer={trackAnswer} onClose={onClose} onFinish={refill} />;
   }
 
   return (

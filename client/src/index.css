@@ -44,6 +44,7 @@
   --color-ink-ghost: var(--ink-ghost);
   --color-tint: var(--tint); /* base of translucent overlays: white on dark, navy on light */
   --color-surface: var(--surface);
+  --color-viz-1: var(--viz-1);
 }
 
 @layer base {
@@ -66,6 +67,12 @@
     --glass-shadow: inset 0 1px 0 rgb(255 255 255 / 0.08), 0 10px 40px rgb(0 0 0 / 0.35);
     --glass-strong-bg: rgb(13 18 48 / 0.85);
     --glass-strong-shadow: 0 20px 60px rgb(0 0 0 / 0.5);
+    /* Charts: one blue series; sequential heatmap ramp (more activity = brighter on dark) */
+    --viz-1: #3987e5;
+    --viz-heat-1: #184f95;
+    --viz-heat-2: #256abf;
+    --viz-heat-3: #3987e5;
+    --viz-heat-4: #86b6ef;
   }
   :root.light {
     color-scheme: light;
@@ -86,6 +93,11 @@
     --glass-shadow: inset 0 1px 0 rgb(255 255 255 / 0.9), 0 10px 40px rgb(30 42 90 / 0.12);
     --glass-strong-bg: rgb(255 255 255 / 0.85);
     --glass-strong-shadow: 0 20px 60px rgb(30 42 90 / 0.18);
+    --viz-1: #2a78d6;
+    --viz-heat-1: #b7d3f6;
+    --viz-heat-2: #6da7ec;
+    --viz-heat-3: #2a78d6;
+    --viz-heat-4: #184f95;
   }
   body {
     @apply bg-app text-ink-soft antialiased;

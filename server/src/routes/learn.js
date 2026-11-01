@@ -2,29 +2,23 @@ import { Router } from 'express';
 import Course from '../models/Course.js';
 import Enrollment from '../models/Enrollment.js';
 import LeagueMembership from '../models/LeagueMembership.js';
+import LessonAttempt from '../models/LessonAttempt.js';
 import Lesson from '../models/Lesson.js';
 import User from '../models/User.js';
 import { requireAuth } from '../middleware/auth.js';
+import { studentAnalytics } from '../services/analytics.js';
 import { addLeagueXp, closeFinishedWeeks, currentWeek, sortedGroup, weekEndsAt, zoneFor } from '../services/league.js';
 import { lessonStates, nextLesson, orderedLessons } from '../services/progress.js';
 import { lessonSummaries } from '../services/stats.js';
-import { recordActivity, refreshStreak } from '../services/streak.js';
+import { localDate, recordActivity, refreshStreak } from '../services/streak.js';
 import { HttpError } from '../utils/httpError.js';
+import { answerInput, attemptInput, finishInput } from '../utils/schemas.js';
 import { levelInfo } from '../utils/levels.js';
+import { badgesFor } from '../services/badges.js';
 
 export const MAX_HEARTS = 5;
 const PRACTICE_SIZE = 6;
 
-const BADGES = [
-  { key: 'first_lesson', title: 'First steps', description: 'Complete your first lesson', earned: (s) => s.lessonsCompleted >= 1 },
-  { key: 'ten_lessons', title: 'On a roll', description: 'Complete 10 lessons', earned: (s) => s.lessonsCompleted >= 10 },
-  { key: 'fifty_lessons', title: 'Code machine', description: 'Complete 50 lessons', earned: (s) => s.lessonsCompleted >= 50 },
-  { key: 'streak_7', title: 'Week warrior', description: 'Reach a 7-day streak', earned: (s) => s.longestStreak >= 7 },
-  { key: 'streak_30', title: 'Unstoppable', description: 'Reach a 30-day streak', earned: (s) => s.longestStreak >= 30 },
-  { key: 'xp_500', title: 'XP hunter', description: 'Earn 500 XP', earned: (s) => s.xp >= 500 },
-  { key: 'graduate', title: 'Graduate', description: 'Finish a whole course', earned: (s) => s.coursesCompleted >= 1 },
-  { key: 'promoted', title: 'Moving up', description: 'Get promoted to a new league', earned: (s) => s.highestTier >= 1 },
-];
 
 const router = Router();
 router.use(requireAuth);
@@ -158,7 +152,15 @@ router.get('/lessons/:id', async (req, res) => {
   });
 });
 
+/** Marks a tracked session finished (ignored for admin previews, which aren't tracked). */
+async function finishAttempt(user, attemptId, fields) {
+  if (!attemptId) return;
+  const now = new Date();
+  await LessonAttempt.updateOne({ _id: attemptId, user: user._id }, { ...fields, completed: true, finishedAt: now, lastEventAt: now });
+}
+
 router.post('/lessons/:id/complete', async (req, res) => {
+  const { attemptId } = finishInput.parse(req.body ?? {});
   const { lesson, enrollment, ordered, isAdmin } = await loadPlayableLesson(req.user, req.params.id);
   if (isAdmin) {
     return res.json({ preview: true, xpEarned: 0, firstTime: false, streakExtended: false, freezeEarned: false, leveledUp: false, courseCompleted: false, user: req.user });
@@ -183,7 +185,7 @@ router.post('/lessons/:id/complete', async (req, res) => {
   user.xp += xpEarned;
   refreshStreak(user);
   const { extended, freezeEarned } = recordActivity(user);
-  await Promise.all([updated.save(), user.save(), addLeagueXp(user, xpEarned)]);
+  await Promise.all([updated.save(), user.save(), addLeagueXp(user, xpEarned), finishAttempt(user, attemptId, { xpEarned, firstTime })]);
 
   res.json({
     preview: false,
@@ -218,7 +220,7 @@ router.get('/practice', async (req, res) => {
     const states = lessonStates(lessons, completedIds, isAdmin);
     for (const lesson of lessons) {
       if (states.get(String(lesson._id)) === 'locked') continue;
-      pool.push(...lesson.exercises.filter((ex) => ex.type !== 'code_challenge'));
+      pool.push(...lesson.exercises.filter((ex) => ex.type !== 'code_challenge').map((ex) => ({ ...ex.toJSON(), lessonId: lesson._id })));
     }
   }
 
@@ -230,10 +232,54 @@ router.get('/practice', async (req, res) => {
 });
 
 router.post('/practice/complete', async (req, res) => {
+  const { attemptId } = finishInput.parse(req.body ?? {});
+  await finishAttempt(req.user, attemptId, {});
   req.user.hearts.count = MAX_HEARTS;
   req.user.hearts.refilledAt = new Date();
   await req.user.save();
   res.json({ user: req.user });
+});
+
+// --- Session tracking (lesson / practice attempts and every answer) ---
+
+router.post('/attempts', async (req, res) => {
+  const { kind, lessonId } = attemptInput.parse(req.body);
+  if (req.user.role === 'admin') return res.status(201).json({ attemptId: null }); // previews aren't tracked
+
+  let course = null;
+  if (kind === 'lesson') {
+    if (!lessonId) throw new HttpError(400, 'lessonId is required');
+    course = (await loadPlayableLesson(req.user, lessonId)).course._id;
+  }
+  const now = new Date();
+  const hour = Number(new Intl.DateTimeFormat('en-GB', { timeZone: req.user.timezone, hour: '2-digit', hourCycle: 'h23' }).format(now));
+  const attempt = await LessonAttempt.create({
+    user: req.user._id,
+    kind,
+    course,
+    lesson: kind === 'lesson' ? lessonId : null,
+    startedAt: now,
+    lastEventAt: now,
+    localDate: localDate(req.user.timezone, now),
+    localHour: hour,
+  });
+  res.status(201).json({ attemptId: attempt._id });
+});
+
+router.post('/attempts/:id/answers', async (req, res) => {
+  const answer = answerInput.parse(req.body);
+  // Capped so a stuck client can't grow a session forever
+  const { matchedCount } = await LessonAttempt.updateOne(
+    { _id: req.params.id, user: req.user._id, 'answers.299': { $exists: false } },
+    { $push: { answers: { ...answer, at: new Date() } }, $set: { lastEventAt: new Date() } }
+  );
+  if (!matchedCount) throw new HttpError(404, 'Session not found');
+  res.status(204).end();
+});
+
+// A student's own statistics (no question-level detail)
+router.get('/stats', async (req, res) => {
+  res.json(await studentAnalytics(req.user._id, { detail: false }));
 });
 
 // This week's league group
@@ -273,7 +319,7 @@ router.get('/profile', async (req, res) => {
   };
   res.json({
     stats,
-    badges: BADGES.map(({ key, title, description, earned }) => ({ key, title, description, earned: earned(stats) })),
+    badges: badgesFor(stats),
   });
 });
 

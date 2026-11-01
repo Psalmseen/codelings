@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { CircleCheck, CircleX, Heart } from 'lucide-react';
-import { correctAnswer, initialValue, isCorrect, isReady } from '../../lib/exercises';
+import { correctAnswer, describeAnswer, initialValue, isCorrect, isReady } from '../../lib/exercises';
 import { sounds } from '../../lib/sound';
 import { PageLoader, Spinner } from '../ui';
 import PlayerShell, { PlayerFooter } from './PlayerShell';
@@ -23,9 +23,10 @@ const isTypingTarget = (el) => el.tagName === 'TEXTAREA' || el.closest?.('.cm-ed
 /**
  * Plays a list of exercises one at a time. Wrong quiz answers go to the back of the queue
  * until answered correctly. Failed code checks cost a heart (when `hearts` isn't null).
- * `paused` turns off keyboard shortcuts while something is shown on top.
+ * `paused` turns off keyboard shortcuts while something is shown on top. `onAnswer` receives every
+ * checked answer (for statistics).
  */
-export default function ExerciseRunner({ exercises, hearts = null, paused = false, onCodeFail, onOutOfHearts, onFinish, onClose }) {
+export default function ExerciseRunner({ exercises, hearts = null, paused = false, onAnswer, onCodeFail, onOutOfHearts, onFinish, onClose }) {
   const [queue, setQueue] = useState(() => exercises.map((_, i) => i));
   const [solved, setSolved] = useState(0);
   const [mistakes, setMistakes] = useState(0);
@@ -35,14 +36,21 @@ export default function ExerciseRunner({ exercises, hearts = null, paused = fals
   const [checking, setChecking] = useState(false);
   const [round, setRound] = useState(0);
   const codeRef = useRef(null);
+  const shownAt = useRef(Date.now()); // when the current question (or retry) started
 
   const exercise = exercises[queue[0]];
   const isCode = exercise.type === 'code_challenge';
   const ready = isReady(exercise, value);
 
+  function report(correct, failedChecks) {
+    onAnswer?.({ exercise, correct, answer: describeAnswer(exercise, value), timeMs: Date.now() - shownAt.current, failedChecks });
+  }
+
   async function check() {
     if (!isCode) {
-      if (isCorrect(exercise, value)) {
+      const correct = isCorrect(exercise, value);
+      report(correct);
+      if (correct) {
         setPhase('correct');
         sounds.correct();
       } else {
@@ -58,6 +66,7 @@ export default function ExerciseRunner({ exercises, hearts = null, paused = fals
     const summary = await codeRef.current.run();
     setChecking(false);
     setCodeSummary(summary);
+    report(summary.passed, summary.failed);
     if (summary.passed) {
       setPhase('correct');
       sounds.correct();
@@ -71,6 +80,7 @@ export default function ExerciseRunner({ exercises, hearts = null, paused = fals
   }
 
   function next() {
+    shownAt.current = Date.now();
     if (phase === 'codeFailed') return setPhase('answer');
 
     const remaining = phase === 'correct' ? queue.slice(1) : [...queue.slice(1), queue[0]];

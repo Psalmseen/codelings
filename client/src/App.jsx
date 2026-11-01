@@ -1,6 +1,7 @@
 import { Link, Route, Routes } from 'react-router';
 import { GuestOnly, HomeRedirect, RequireAuth } from './components/RouteGuards';
 import { EmptyState } from './components/ui';
+import AdminAnalytics from './pages/admin/AdminAnalytics';
 import AdminCourses from './pages/admin/AdminCourses';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminInvites from './pages/admin/AdminInvites';
@@ -8,6 +9,7 @@ import AdminLayout from './pages/admin/AdminLayout';
 import AdminStudents from './pages/admin/AdminStudents';
 import CourseBuilder from './pages/admin/CourseBuilder';
 import LessonEditor from './pages/admin/LessonEditor';
+import StudentStats from './pages/admin/StudentStats';
 import JoinPage from './pages/JoinPage';
 import LoginPage from './pages/LoginPage';
 import CourseMap from './pages/student/CourseMap';
@@ -54,6 +56,8 @@ export default function App() {
         <Route path="courses/:courseId" element={<CourseBuilder />} />
         <Route path="lessons/:lessonId" element={<LessonEditor />} />
         <Route path="students" element={<AdminStudents />} />
+        <Route path="students/:studentId" element={<StudentStats />} />
+        <Route path="analytics" element={<AdminAnalytics />} />
         <Route path="invites" element={<AdminInvites />} />
       </Route>
 

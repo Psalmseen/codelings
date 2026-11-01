@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { BookCheck, Cpu, Flame, Footprints, GraduationCap, Lock, LogOut, Rocket, Snowflake, Sparkles, TrendingUp, Trophy, Zap } from 'lucide-react';
+import { AccuracyCard, ActivityCard, formatMinutes, WeeklyXpCard } from '../../components/StudentStatsCharts';
 import ThemeSwitch from '../../components/ThemeSwitch';
 import { ErrorState, PageLoader } from '../../components/ui';
 import { useAuth } from '../../context/AuthContext';
@@ -37,6 +38,7 @@ export default function ProfilePage() {
   const { user, setUser, logout } = useAuth();
   const toast = useToast();
   const { data, loading, error, reload } = useFetch('/learn/profile');
+  const stats = useFetch('/learn/stats');
   const [savingReminders, setSavingReminders] = useState(false);
   const tier = tierOf(user.league?.tier);
 
@@ -81,6 +83,20 @@ export default function ProfilePage() {
         </div>
         <p className="mt-3 text-sm font-semibold text-ink-muted">🧊 You earn a streak freeze for every 7-day streak. It saves your streak if you miss a day.</p>
       </section>
+
+      {stats.data && (
+        <section className="space-y-4">
+          <div className="flex items-end justify-between">
+            <h2 className="text-xl font-black">My stats</h2>
+            <p className="text-sm font-bold text-ink-muted">
+              {formatMinutes(stats.data.totals.minutesStudied)} studied · {formatMinutes(stats.data.totals.minutesThisWeek)} this week
+            </p>
+          </div>
+          <ActivityCard calendar={stats.data.calendar} />
+          <WeeklyXpCard weeklyXp={stats.data.weeklyXp} />
+          <AccuracyCard byType={stats.data.byType} />
+        </section>
+      )}
 
       <section>
         <h2 className="mb-3 text-xl font-black">Badges</h2>
