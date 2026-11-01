@@ -38,6 +38,7 @@ const userSchema = new mongoose.Schema(
     ],
     timezone: { type: String, default: 'Africa/Lagos' },
     emailReminders: { type: Boolean, default: true },
+    pushReminders: { type: Boolean, default: true }, // only reaches devices that allowed notifications
     lastReminderOn: { type: String, default: null }, // YYYY-MM-DD (user's timezone) of the last reminder email
     lastSeenAt: Date,
   },

@@ -5,6 +5,7 @@ import Application from '../models/Application.js';
 import User from '../models/User.js';
 import { findReferrer } from '../services/accounts.js';
 import { applicationReceivedEmail, newApplicationEmail, sendMail } from '../services/mail.js';
+import { sendPush } from '../services/push.js';
 import { HttpError } from '../utils/httpError.js';
 import { applyInput } from '../utils/schemas.js';
 import { validTimezone } from '../utils/timezone.js';
@@ -60,6 +61,14 @@ router.post('/', applyLimiter, async (req, res) => {
   });
 
   const admins = await User.find({ role: 'admin' }).select('email');
+  for (const admin of admins) {
+    sendPush(admin._id, {
+      title: 'New application 📥',
+      body: `${application.name}${referrer ? ` (referred by ${referrer.name.split(' ')[0]})` : ''} wants to join Codelings.`,
+      url: '/admin/applications',
+      tag: 'application',
+    }).catch((err) => console.error('[push] admin notification failed:', err.message));
+  }
   await Promise.all([
     trySend(applicationReceivedEmail({ to: application.email, name: application.name })),
     ...admins.map((admin) =>

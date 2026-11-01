@@ -1,6 +1,7 @@
 import { Link } from 'react-router';
 import { Flame, Heart, Play } from 'lucide-react';
 import Mascot from '../../components/Mascot';
+import NotificationPrompt from '../../components/NotificationPrompt';
 import { EmptyState, ErrorState, PageLoader, ProgressBar } from '../../components/ui';
 import { useAuth } from '../../context/AuthContext';
 import { useFetch } from '../../hooks/useFetch';
@@ -65,6 +66,8 @@ export default function LearnHome() {
           <p className={`font-semibold ${status.atRisk ? 'text-flame-500' : 'text-ink-muted'}`}>{greeting(status)}</p>
         </div>
       </section>
+
+      {user.role === 'student' && <NotificationPrompt />}
 
       {continueCourse && <ContinueCard course={continueCourse} atRisk={status.atRisk} streak={status.streak} />}
 

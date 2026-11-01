@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router';
 import { BookCheck, KeyRound, Cpu, Flame, Footprints, GraduationCap, Lock, LogOut, Rocket, Snowflake, Sparkles, TrendingUp, Trophy, Zap } from 'lucide-react';
 import { AccuracyCard, ActivityCard, formatMinutes, WeeklyXpCard } from '../../components/StudentStatsCharts';
+import NotificationsSetting from '../../components/NotificationsSetting';
 import ReferralCard from '../../components/ReferralCard';
 import ThemeSwitch from '../../components/ThemeSwitch';
 import { ErrorState, PageLoader } from '../../components/ui';
@@ -127,6 +128,7 @@ export default function ProfilePage() {
 
       <section className="card space-y-4">
         <h2 className="text-xl font-black">Settings</h2>
+        <NotificationsSetting description="A reminder on this device when your streak is at risk" />
         <label className="flex cursor-pointer items-center justify-between gap-4">
           <span>
             <span className="block font-extrabold">Email reminders</span>

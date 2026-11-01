@@ -5,6 +5,7 @@ import { useToast } from '../../context/ToastContext';
 import { useFetch } from '../../hooks/useFetch';
 import { api } from '../../lib/api';
 import { firstName, percent } from '../../lib/format';
+import NotificationsSetting from '../NotificationsSetting';
 import { ErrorState, Spinner } from '../ui';
 
 function nudgeMessage(student) {
@@ -114,12 +115,16 @@ export function RemindersCard() {
       <div className="min-w-0 flex-1">
         <p className="font-black">Automatic streak reminders are on</p>
         <p className="text-sm font-semibold text-ink-muted">
-          At 7pm in each student's timezone, anyone with a streak who hasn't practised that day gets an email. Students can turn it off in their profile.
+          At 7pm in each student's timezone, anyone with a streak who hasn't practised that day gets an email and a phone notification (if they turned
+          notifications on). Students control both in their profile.
         </p>
       </div>
       <button className="btn btn-secondary btn-sm" onClick={sendTest} disabled={sending}>
-        {sending ? <Spinner className="size-4" /> : <Mail className="size-4" />} Send me a test
+        {sending ? <Spinner className="size-4" /> : <Mail className="size-4" />} Send me a test email
       </button>
+      <div className="w-full border-t border-tint/10 pt-4">
+        <NotificationsSetting description="Get a notification on this device whenever someone applies" />
+      </div>
     </section>
   );
 }

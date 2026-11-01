@@ -6,6 +6,7 @@ import Enrollment from '../models/Enrollment.js';
 import Lesson from '../models/Lesson.js';
 import User from '../models/User.js';
 import { sendMail, streakReminderEmail } from './mail.js';
+import { sendPush } from './push.js';
 import { nextLesson, orderedLessons } from './progress.js';
 import { countLessons } from './stats.js';
 import { localDate, refreshStreak } from './streak.js';
@@ -43,12 +44,17 @@ export async function pendingCourses(userId, now = new Date()) {
 }
 
 /**
- * Emails students whose streak ends tonight: it's 7pm for them, they haven't done a lesson
- * today and they still have a lesson to do. At most one email per student per day.
+ * Reminds students whose streak ends tonight (it's 7pm for them, no lesson done today, and a
+ * lesson still to do) by email and/or phone notification, per their settings. At most once a day.
  */
 export async function sendStreakReminders(now = new Date()) {
-  const students = await User.find({ role: 'student', emailReminders: true, 'streak.current': { $gt: 0 } });
+  const students = await User.find({
+    role: 'student',
+    'streak.current': { $gt: 0 },
+    $or: [{ emailReminders: true }, { pushReminders: true }],
+  });
   let sent = 0;
+  let pushed = 0;
 
   for (const user of students) {
     try {
@@ -65,19 +71,34 @@ export async function sendStreakReminders(now = new Date()) {
         continue;
       }
 
-      const delivered = await sendMail(
-        streakReminderEmail({
-          to: user.email,
-          name: user.name,
-          streak: user.streak.current,
-          freezes: user.streak.freezes,
-          courseTitle: pending.enrollment.course.title,
-          lessonTitle: pending.next.title,
-          link: `${clientUrl}/learn/courses/${pending.enrollment.course._id}`,
-          settingsLink: `${clientUrl}/learn/profile`,
-        })
-      );
-      if (delivered) {
+      const coursePath = `/learn/courses/${pending.enrollment.course._id}`;
+      const emailed = user.emailReminders
+        ? await sendMail(
+            streakReminderEmail({
+              to: user.email,
+              name: user.name,
+              streak: user.streak.current,
+              freezes: user.streak.freezes,
+              courseTitle: pending.enrollment.course.title,
+              lessonTitle: pending.next.title,
+              link: `${clientUrl}${coursePath}`,
+              settingsLink: `${clientUrl}/learn/profile`,
+            })
+          ).catch((err) => {
+            console.error(`[reminders] email to ${user.email} failed:`, err.message);
+            return false;
+          })
+        : false;
+      const devices = user.pushReminders
+        ? await sendPush(user._id, {
+            title: `🔥 Your ${user.streak.current}-day streak ends at midnight!`,
+            body: `Finish "${pending.next.title}" in ${pending.enrollment.course.title} to keep it alive.`,
+            url: coursePath,
+            tag: 'streak',
+          })
+        : 0;
+      if (devices) pushed += 1;
+      if (emailed || devices) {
         user.lastReminderOn = today;
         sent++;
       }
@@ -86,7 +107,7 @@ export async function sendStreakReminders(now = new Date()) {
       console.error(`[reminders] failed for ${user.email}:`, err.message);
     }
   }
-  return { checked: students.length, sent };
+  return { checked: students.length, sent, pushed };
 }
 
 /**

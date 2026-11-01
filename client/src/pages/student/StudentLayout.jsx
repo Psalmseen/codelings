@@ -1,9 +1,11 @@
+import { useEffect } from 'react';
 import { Link, NavLink, Outlet } from 'react-router';
 import { Home, Trophy, UserRound } from 'lucide-react';
 import { Logo } from '../../components/Mascot';
 import NoticeModal from '../../components/NoticeModal';
 import StatPills from '../../components/StatPills';
 import { useAuth } from '../../context/AuthContext';
+import { resyncPush } from '../../lib/push';
 
 const NAV = [
   { to: '/learn', label: 'Learn', icon: Home, end: true },
@@ -18,6 +20,9 @@ const navClass = ({ isActive }) =>
 
 export default function StudentLayout() {
   const { user } = useAuth();
+  useEffect(() => {
+    resyncPush(); // this device's notifications follow whoever is signed in
+  }, [user._id]);
 
   return (
     <div className="min-h-dvh pb-24 sm:pb-0">

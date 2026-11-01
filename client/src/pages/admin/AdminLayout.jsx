@@ -1,6 +1,8 @@
+import { useEffect } from 'react';
 import { NavLink, Outlet } from 'react-router';
 import { BarChart3, BookOpen, Inbox, LayoutDashboard, LogOut, Users } from 'lucide-react';
 import { useFetch } from '../../hooks/useFetch';
+import { resyncPush } from '../../lib/push';
 import { Logo } from '../../components/Mascot';
 import ThemeSwitch from '../../components/ThemeSwitch';
 import { useAuth } from '../../context/AuthContext';
@@ -16,6 +18,9 @@ const NAV = [
 export default function AdminLayout() {
   const { user, logout } = useAuth();
   const { data: stats } = useFetch('/admin/stats');
+  useEffect(() => {
+    resyncPush();
+  }, [user._id]);
 
   return (
     <div className="min-h-dvh lg:flex">

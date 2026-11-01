@@ -12,6 +12,7 @@ import applyRoutes from './routes/apply.js';
 import authRoutes from './routes/auth.js';
 import cronRoutes from './routes/cron.js';
 import learnRoutes from './routes/learn.js';
+import pushRoutes from './routes/push.js';
 
 // In production the built React app is served by this same server
 const clientDist = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../client/dist');
@@ -39,6 +40,7 @@ export function createApp() {
   app.use('/api/auth', authRoutes);
   app.use('/api/apply', applyRoutes);
   app.use('/api/learn', learnRoutes);
+  app.use('/api/push', pushRoutes);
   app.use('/api/admin', adminRoutes);
   app.use('/api/cron', cronRoutes);
 

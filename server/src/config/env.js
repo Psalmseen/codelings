@@ -26,6 +26,10 @@ export const env = {
   SMTP_PASS: process.env.SMTP_PASS,
   MAIL_FROM: process.env.MAIL_FROM ?? 'Codelings <hello@codelings.local>',
   BREVO_API_KEY: process.env.BREVO_API_KEY,
+  // Optional: push notification keys. If unset they're generated once and kept in the database.
+  VAPID_PUBLIC_KEY: process.env.VAPID_PUBLIC_KEY,
+  VAPID_PRIVATE_KEY: process.env.VAPID_PRIVATE_KEY,
+  VAPID_SUBJECT: process.env.VAPID_SUBJECT,
   LEAGUE_TIMEZONE: process.env.LEAGUE_TIMEZONE ?? 'Africa/Lagos',
   CRON_SECRET: process.env.CRON_SECRET,
   ADMIN_NAME: process.env.ADMIN_NAME ?? 'Admin',

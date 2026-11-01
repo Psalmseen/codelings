@@ -71,6 +71,10 @@ Students can install the app from their phone browser ("Add to Home screen").
 
 Share `/apply` (Admin → **Applications** has the link with copy/WhatsApp buttons). Applicants give name, email and phone (required), an optional referral code, and optional details (date of birth, gender, location, occupation, experience, goals, laptop, preferred time). You approve (choosing courses and cohort) or reject with a note. Approval creates the account and emails a temporary password, which the student must change at first sign-in; the password is also shown to you once in case the email doesn't arrive. Every student gets a referral code and link on their profile (`/apply?ref=CODE`), and you can see who referred whom.
 
+## Phone notifications (free)
+
+Codelings sends web push notifications: the 7pm streak reminder to students, and a "new application" alert to admins. They work on Android and desktop browsers, and on iPhone (iOS 16.4+) once Codelings is added to the Home Screen. Students turn them on from the home-page card or Profile → Settings; admins from the dashboard's reminders card. No account or setup is needed: the server generates its push keys on first start and stores them in the database (or set `VAPID_PUBLIC_KEY` / `VAPID_PRIVATE_KEY` to supply your own).
+
 ## Statistics
 
 Every lesson and practice round is recorded as a session (`LessonAttempt`) with each answer: right or wrong, what was answered, time taken, and failed code checks. Admin → **Analytics** shows class-wide numbers (activity, where students drop off, hardest questions, leaderboards, cohorts); each student's page (Students → **Stats**) shows their activity calendar, time, accuracy, mistakes, code challenges, sessions and league history. Both export to CSV. Students see a lighter version on their profile.

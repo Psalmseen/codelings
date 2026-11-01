@@ -45,6 +45,7 @@ export const changePasswordInput = z
 export const profileInput = z.object({
   name: text.min(1).max(60).optional(),
   emailReminders: z.boolean().optional(),
+  pushReminders: z.boolean().optional(),
   timezone: z.string().optional(),
 });
 
@@ -171,6 +172,11 @@ export const answerInput = z.object({
 });
 
 export const finishInput = z.object({ attemptId: objectId.nullable().optional() });
+
+export const pushSubscriptionInput = z.object({
+  endpoint: z.string().url().max(1000),
+  keys: z.object({ p256dh: z.string().min(1).max(200), auth: z.string().min(1).max(100) }),
+});
 
 export const enrollInput = z.object({ courseId: objectId, cohortId: objectId.nullable().optional() });
 export const enrollmentCohortInput = z.object({ cohortId: objectId.nullable() });
